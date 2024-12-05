@@ -1,0 +1,86 @@
+version: "3.9"
+
+services:
+  observer-shard-0:
+    image: multiversx/chain-observer:v1.8.4.0
+    container_name: observer-shard-0
+    environment:
+      - SHARD=0
+      - DISPLAY_NAME=MyObservingSquad-0
+    volumes:
+      - ./node-0/config:/app/config
+      - ./node-0/db:/app/db
+      - ./node-0/logs:/app/logs
+    networks:
+      multiversx-squad:
+        ipv4_address: 10.0.0.6
+    ports:
+      - "10000:10000" # P2P_PORT
+
+  observer-shard-1:
+    image: multiversx/chain-observer:v1.8.4.0
+    container_name: observer-shard-1
+    environment:
+      - SHARD=1
+      - DISPLAY_NAME=MyObservingSquad-1
+    volumes:
+      - ./node-1/config:/app/config
+      - ./node-1/db:/app/db
+      - ./node-1/logs:/app/logs
+    networks:
+      multiversx-squad:
+        ipv4_address: 10.0.0.5
+    ports:
+      - "10001:10001" # P2P_PORT
+
+  observer-shard-2:
+    image: multiversx/chain-observer:v1.8.4.0
+    container_name: observer-shard-2
+    environment:
+      - SHARD=2
+      - DISPLAY_NAME=MyObservingSquad-2
+    volumes:
+      - ./node-2/config:/app/config
+      - ./node-2/db:/app/db
+      - ./node-2/logs:/app/logs
+    networks:
+      multiversx-squad:
+        ipv4_address: 10.0.0.4
+    ports:
+      - "10002:10002" # P2P_PORT
+
+  observer-metachain:
+    image: multiversx/chain-observer:v1.8.4.0
+    container_name: observer-metachain
+    environment:
+      - SHARD=metachain
+      - DISPLAY_NAME=MyObservingSquad-metachain
+    volumes:
+      - ./node-metachain/config:/app/config
+      - ./node-metachain/db:/app/db
+      - ./node-metachain/logs:/app/logs
+    networks:
+      multiversx-squad:
+        ipv4_address: 10.0.0.3
+    ports:
+      - "10003:10003" # P2P_PORT
+
+  proxy:
+    image: multiversx/chain-squad-proxy:v1.1.54
+    container_name: squad-proxy
+    environment:
+      - DISPLAY_NAME=MyObservingSquad-Proxy
+    volumes:
+      - ./proxy/config:/app/config
+    networks:
+      multiversx-squad:
+        ipv4_address: 10.0.0.2
+    ports:
+      - "8079:8079"
+
+networks:
+  multiversx-squad:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 10.0.0.0/24
