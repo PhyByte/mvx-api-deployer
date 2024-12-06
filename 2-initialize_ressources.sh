@@ -1,4 +1,6 @@
 #!/bin/bash
+
+# Function to set up the observing environment
 setup-observing-environment() {
   # Configuration
   KEYS_FOLDER="$HOME/keys"
@@ -16,16 +18,15 @@ setup-observing-environment() {
   echo "Creating folder structure at $SQUAD_FOLDER..."
   mkdir -p "$SQUAD_FOLDER"/{proxy,node-0,node-1,node-2,node-metachain}/{config,db,logs}
 
-  # Generate PEM files
+  # Generate PEM files for nodes
   echo "Generating PEM files in $KEYS_FOLDER..."
   mkdir -p "$KEYS_FOLDER"
-  # Correct the loop to generate shard PEM files
   for i in $(seq 0 $((NUM_OBSERVERS - 1))); do
     docker run --rm --mount type=bind,source="$KEYS_FOLDER",destination=/keys --workdir /keys multiversx/chain-keygenerator:latest
     mv "$KEYS_FOLDER/validatorKey.pem" "$KEYS_FOLDER/${PEM_FILES[$i]}"
   done
 
-  # Explicitly handle the metachain PEM file
+  # Generate PEM file for the metachain
   docker run --rm --mount type=bind,source="$KEYS_FOLDER",destination=/keys --workdir /keys multiversx/chain-keygenerator:latest
   mv "$KEYS_FOLDER/validatorKey.pem" "$KEYS_FOLDER/${PEM_FILES[3]}" # 3 is the metachain index
 
@@ -42,9 +43,9 @@ setup-observing-environment() {
 
   echo "Folder structure and PEM files setup completed!"
   echo "Your folder structure is ready at $SQUAD_FOLDER."
-
 }
 
+# Function to modify the configuration file
 changeNodesConfig() {
   echo "Changing node configuration for generated container..."
 
@@ -68,18 +69,19 @@ changeNodesConfig() {
   # Load environment variables
   source "$ENV_FILE"
 
-  # Update configuration using sed
+  # Update configuration using sed, modifying only the first occurrence of each key
   sed -i \
-    -e "1,17 s/^Enabled\s*=.*/Enabled = true/" \
-    -e "1,17 s#^URL\s*=.*#URL = \"$ELASTIC_URL\"#" \
-    -e "1,17 s/^UseKibana\s*=.*/UseKibana = true/" \
-    -e "1,17 s/^Username\s*=.*/Username = \"$ELASTIC_USERNAME\"/" \
-    -e "1,17 s/^Password\s*=.*/Password = \"$ELASTIC_PASSWORD\"/" \
+    -e "0,/^\s*Enabled\s*=.*/s//    Enabled = true/" \
+    -e "0,/^\s*URL\s*=.*/s##    URL = \"$ELASTIC_URL\"#" \
+    -e "0,/^\s*UseKibana\s*=.*/s//    UseKibana = true/" \
+    -e "0,/^\s*Username\s*=.*/s//    Username = \"$ELASTIC_USERNAME\"/" \
+    -e "0,/^\s*Password\s*=.*/s//    Password = \"$ELASTIC_PASSWORD\"/" \
     "$CONFIG_FILE"
 
   echo "Configuration updated in $CONFIG_FILE:"
   grep -E "Enabled|URL|UseKibana|Username|Password" "$CONFIG_FILE"
 }
 
+# Execute the setup functions
 setup-observing-environment
 changeNodesConfig
