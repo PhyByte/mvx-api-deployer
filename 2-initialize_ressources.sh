@@ -19,15 +19,15 @@ setup-observing-environment() {
   # Generate PEM files
   echo "Generating PEM files in $KEYS_FOLDER..."
   mkdir -p "$KEYS_FOLDER"
-# Correct the loop to generate shard PEM files
-for i in $(seq 0 $((NUM_OBSERVERS - 1))); do
-  docker run --rm --mount type=bind,source="$KEYS_FOLDER",destination=/keys --workdir /keys multiversx/chain-keygenerator:latest
-  mv "$KEYS_FOLDER/validatorKey.pem" "$KEYS_FOLDER/${PEM_FILES[$i]}"
-done
+  # Correct the loop to generate shard PEM files
+  for i in $(seq 0 $((NUM_OBSERVERS - 1))); do
+    docker run --rm --mount type=bind,source="$KEYS_FOLDER",destination=/keys --workdir /keys multiversx/chain-keygenerator:latest
+    mv "$KEYS_FOLDER/validatorKey.pem" "$KEYS_FOLDER/${PEM_FILES[$i]}"
+  done
 
-# Explicitly handle the metachain PEM file
-docker run --rm --mount type=bind,source="$KEYS_FOLDER",destination=/keys --workdir /keys multiversx/chain-keygenerator:latest
-mv "$KEYS_FOLDER/validatorKey.pem" "$KEYS_FOLDER/${PEM_FILES[3]}"  # 3 is the metachain index
+  # Explicitly handle the metachain PEM file
+  docker run --rm --mount type=bind,source="$KEYS_FOLDER",destination=/keys --workdir /keys multiversx/chain-keygenerator:latest
+  mv "$KEYS_FOLDER/validatorKey.pem" "$KEYS_FOLDER/${PEM_FILES[3]}" # 3 is the metachain index
 
   # Move PEM files to corresponding config folders
   echo "Copying PEM files to config folders..."
@@ -50,28 +50,35 @@ changeNodesConfig() {
 
   # Paths
   CONFIG_FILE="$HOME/mx-chain-mainnet-config/external.toml"
+  SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+  ENV_FILE="$SCRIPT_DIR/env.config"
 
-  # Check if the file exists
+  # Check if the configuration file exists
   if [ ! -f "$CONFIG_FILE" ]; then
     echo "Error: Configuration file $CONFIG_FILE not found."
     exit 1
   fi
 
-  # Ensure .env variables are loaded
-  SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-  source "$SCRIPT_DIR/env.config"
+  # Check if the environment file exists
+  if [ ! -f "$ENV_FILE" ]; then
+    echo "Error: Environment file $ENV_FILE not found."
+    exit 1
+  fi
 
-  # Modify the required lines within the first 17 lines
-  sed -i '' \
-      -e "1,17 s/^Enabled\s*=.*/Enabled = true/" \
-      -e "1,17 s#^URL\s*=.*#URL = \"$ELASTIC_URL\"#" \
-      -e "1,17 s/^UseKibana\s*=.*/UseKibana = true/" \
-      -e "1,17 s/^Username\s*=.*/Username = \"$ELASTIC_USERNAME\"/" \
-      -e "1,17 s/^Password\s*=.*/Password = \"$ELASTIC_PASSWORD\"/" \
-      "$CONFIG_FILE"
+  # Load environment variables
+  source "$ENV_FILE"
+
+  # Update configuration using sed
+  sed -i \
+    -e "1,17 s/^Enabled\s*=.*/Enabled = true/" \
+    -e "1,17 s#^URL\s*=.*#URL = \"$ELASTIC_URL\"#" \
+    -e "1,17 s/^UseKibana\s*=.*/UseKibana = true/" \
+    -e "1,17 s/^Username\s*=.*/Username = \"$ELASTIC_USERNAME\"/" \
+    -e "1,17 s/^Password\s*=.*/Password = \"$ELASTIC_PASSWORD\"/" \
+    "$CONFIG_FILE"
 
   echo "Configuration updated in $CONFIG_FILE:"
-  cat "$CONFIG_FILE" | grep -E "Enabled|URL|UseKibana|Username|Password"
+  grep -E "Enabled|URL|UseKibana|Username|Password" "$CONFIG_FILE"
 }
 
 setup-observing-environment
