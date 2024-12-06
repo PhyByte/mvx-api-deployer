@@ -61,12 +61,6 @@ transfer_repo_and_setup_second() {
     # Change ownership to the new user
     sudo chown -R $USERNAME:$USERNAME /home/$USERNAME/mvx-api-deployer
 
-    # Clone the second repository directly under the new user's account
-    sudo -u $USERNAME bash -c "
-        cd /home/$USERNAME;
-        git clone https://github.com/multiversx/mx-chain-mainnet-config.git
-    "
-
     # Delete the old repository
     cd 
     rm -rf /mvx-api-deployer
