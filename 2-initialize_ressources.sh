@@ -46,8 +46,10 @@ setup-observing-environment() {
 }
 
 # Function to modify the configuration file
-changeNodesConfig() {
-  echo "Changing node configuration for generated container..."
+generateDockerImage() {
+  echo "Clone official source and modify configuration before to build"
+  cd
+  git clone https://github.com/multiversx/mx-chain-mainnet-config.git
 
   # Paths
   CONFIG_FILE="$HOME/mx-chain-mainnet-config/external.toml"
@@ -79,10 +81,7 @@ changeNodesConfig() {
     "$CONFIG_FILE"
 
   echo "Configuration updated in $CONFIG_FILE:"
-  grep -E "Enabled|URL|UseKibana|Username|Password" "$CONFIG_FILE"
-}
 
-buildDockerImage() {
   cd $HOME/mx-chain-mainnet-config
   # Build the Docker image
   echo "Building Docker image..."
@@ -91,6 +90,4 @@ buildDockerImage() {
 
 # Execute the setup functions
 setup-observing-environment
-changeNodesConfig
-
-buildDockerImage
+generateDockerImage

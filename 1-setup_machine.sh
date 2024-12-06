@@ -68,7 +68,8 @@ transfer_repo_and_setup_second() {
     "
 
     # Delete the old repository
-    rm -rf /home/$USERNAME/mvx-api-deployer
+    cd 
+    rm -rf /mvx-api-deployer
     echo "Repository transferred, and additional repository cloned for $USERNAME."
 }
 
