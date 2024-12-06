@@ -61,18 +61,14 @@ transfer_repo_and_setup_second() {
     # Change ownership to the new user
     sudo chown -R $USERNAME:$USERNAME /home/$USERNAME/mvx-api-deployer
 
-    # Adjust the config for the new user in their environment
-    sudo -u $USERNAME bash -c "
-        cd /home/$USERNAME/mvx-api-deployer;
-        sed -i \"s/mvx-api/$USERNAME/g\" ./env.config;
-    "
-
     # Clone the second repository directly under the new user's account
     sudo -u $USERNAME bash -c "
         cd /home/$USERNAME;
         git clone https://github.com/multiversx/mx-chain-mainnet-config.git
     "
 
+    # Delete the old repository
+    rm -rf /home/$USERNAME/mvx-api-deployer
     echo "Repository transferred, and additional repository cloned for $USERNAME."
 }
 
@@ -81,3 +77,5 @@ upgrade_machine
 install_docker
 create_new_user
 transfer_repo_and_setup_second
+
+sudo su - $USERNAME

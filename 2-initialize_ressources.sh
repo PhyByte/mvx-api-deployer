@@ -82,6 +82,15 @@ changeNodesConfig() {
   grep -E "Enabled|URL|UseKibana|Username|Password" "$CONFIG_FILE"
 }
 
+buildDockerImage() {
+  cd $HOME/mx-chain-mainnet-config
+  # Build the Docker image
+  echo "Building Docker image..."
+  docker image build . -t chain-mainnet-local -f ./docker/Dockerfile
+}
+
 # Execute the setup functions
 setup-observing-environment
 changeNodesConfig
+
+buildDockerImage
