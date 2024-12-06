@@ -53,7 +53,7 @@ generateDockerImage() {
 
   # Paths
   CONFIG_FILE="$HOME/mx-chain-mainnet-config/external.toml"
-  ENV_FILE="$HOME/mx-api-deployer/env.config"
+  ENV_FILE="$HOME/mvx-api-deployer/env.config"
 
   # Check if the configuration file exists
   if [ ! -f "$CONFIG_FILE" ]; then
