@@ -1,3 +1,4 @@
+#!/bin/bash
 
 upgrade_machine() {
     sudo apt -y update && sudo apt -y upgrade
@@ -11,8 +12,8 @@ install_docker() {
         "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu \
   $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list >/dev/null
 
-    sudo apt-get update
-    sudo apt-get install docker-ce docker-ce-cli containerd.io
+    sudo apt -y update
+    sudo apt -y install docker-ce docker-ce-cli containerd.io
 
 
     sudo curl -L "https://github.com/docker/compose/releases/download/v2.3.3/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
@@ -33,6 +34,7 @@ create_new_user() {
     # login to user and clone the repository
     su - mvx-api
     git clone https://gitlab.com/phybyte/mvx-api-deployer.git
+    git clone https://github.com/multiversx/mx-chain-mainnet-config.git
 }
 
 
