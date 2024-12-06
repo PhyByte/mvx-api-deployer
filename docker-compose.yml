@@ -15,53 +15,53 @@ services:
     ports:
       - "10000:10000" # P2P_PORT
 
-  # observer-shard-1:
-  #   image: chain-mainnet-local
-  #   container_name: observer-shard-1
-  #   environment:
-  #     - SHARD=1
-  #     - DISPLAY_NAME=MyObservingSquad-1
-  #   volumes:
-  #     - ./node-1/config:/app/config
-  #     - ./node-1/db:/app/db
-  #     - ./node-1/logs:/app/logs
-  #   networks:
-  #     multiversx-squad:
-  #       ipv4_address: 10.0.0.5
-  #   ports:
-  #     - "10001:10001" # P2P_PORT
+  observer-shard-1:
+    image: chain-mainnet-local
+    container_name: observer-shard-1
+    environment:
+      - SHARD=1
+      - DISPLAY_NAME=MyObservingSquad-1
+    volumes:
+      - ./node-1/config:/app/config
+      - ./node-1/db:/app/db
+      - ./node-1/logs:/app/logs
+    networks:
+      multiversx-squad:
+        ipv4_address: 10.0.0.5
+    ports:
+      - "10001:10001" # P2P_PORT
 
-  # observer-shard-2:
-  #   image: chain-mainnet-local
-  #   container_name: observer-shard-2
-  #   environment:
-  #     - SHARD=2
-  #     - DISPLAY_NAME=MyObservingSquad-2
-  #   volumes:
-  #     - ./node-2/config:/app/config
-  #     - ./node-2/db:/app/db
-  #     - ./node-2/logs:/app/logs
-  #   networks:
-  #     multiversx-squad:
-  #       ipv4_address: 10.0.0.4
-  #   ports:
-  #     - "10002:10002" # P2P_PORT
+  observer-shard-2:
+    image: chain-mainnet-local
+    container_name: observer-shard-2
+    environment:
+      - SHARD=2
+      - DISPLAY_NAME=MyObservingSquad-2
+    volumes:
+      - ./node-2/config:/app/config
+      - ./node-2/db:/app/db
+      - ./node-2/logs:/app/logs
+    networks:
+      multiversx-squad:
+        ipv4_address: 10.0.0.4
+    ports:
+      - "10002:10002" # P2P_PORT
 
-  # observer-metachain:
-  #   image: chain-mainnet-local
-  #   container_name: observer-metachain
-  #   environment:
-  #     - SHARD=metachain
-  #     - DISPLAY_NAME=MyObservingSquad-metachain
-  #   volumes:
-  #     - ./node-metachain/config:/app/config
-  #     - ./node-metachain/db:/app/db
-  #     - ./node-metachain/logs:/app/logs
-  #   networks:
-  #     multiversx-squad:
-  #       ipv4_address: 10.0.0.3
-  #   ports:
-  #     - "10003:10003" # P2P_PORT
+  observer-metachain:
+    image: chain-mainnet-local
+    container_name: observer-metachain
+    environment:
+      - SHARD=metachain
+      - DISPLAY_NAME=MyObservingSquad-metachain
+    volumes:
+      - ./node-metachain/config:/app/config
+      - ./node-metachain/db:/app/db
+      - ./node-metachain/logs:/app/logs
+    networks:
+      multiversx-squad:
+        ipv4_address: 10.0.0.3
+    ports:
+      - "10003:10003" # P2P_PORT
 
   proxy:
     image: multiversx/chain-squad-proxy:v1.1.54
@@ -76,6 +76,26 @@ services:
     ports:
       - "8079:8079"
 
+  elasticsearch:
+    ports:
+      - 127.0.0.1:9200:9200
+    container_name: elasticsearch-container
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.16.1
+    environment:
+      - "discovery.type=single-node"
+      - "xpack.security.enabled=false"
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://127.0.0.1:9200"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # TODO use the websockets based elastic indexer when the communication problems are solved
   elastic-indexer:
     #ports: 22112
     container_name: elastic-indexer
@@ -89,6 +109,29 @@ services:
       && cat ./config/prefs.toml
       && ./elasticindexer -log-level *:DEBUG"
 
+  redis:
+    image: "redis:alpine"
+    command: redis-server
+    ports:
+      - "127.0.0.1:6379:6379"
+    environment:
+      - REDIS_REPLICATION_MODE=master
+
+  api:
+    ports:
+      - 127.0.0.1:3001:3001
+    container_name: api
+    image: multiversx/mx-api-service:test1
+    environment:
+      MVX_ENV: devnet
+      REDIS_IP: redis
+      GATEWAY_URL: http://chain-simulator:8085
+      ELASTICSEARCH_URL: http://elasticsearch:9200
+    depends_on:
+      elasticsearch:
+        condition: service_healthy
+      redis:
+        condition: service_started
 networks:
   multiversx-squad:
     driver: bridge

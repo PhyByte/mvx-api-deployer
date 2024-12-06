@@ -53,8 +53,7 @@ generateDockerImage() {
 
   # Paths
   CONFIG_FILE="$HOME/mx-chain-mainnet-config/external.toml"
-  SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-  ENV_FILE="$SCRIPT_DIR/env.config"
+  ENV_FILE="$HOME/mx-api-deployer/env.config"
 
   # Check if the configuration file exists
   if [ ! -f "$CONFIG_FILE" ]; then
