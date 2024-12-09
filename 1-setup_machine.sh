@@ -20,4 +20,6 @@ Create_New_User
 Log-Step "Transfer the ressources to the newly created user"
 Transfer_Ressources
 
+
+Log-Step "Login to the new user: ${USERNAME}"
 sudo su - $USERNAME
