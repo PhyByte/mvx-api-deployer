@@ -62,7 +62,7 @@ ObsSquad_Activate_Indexer() {
 
     # Define base paths
     local source_file="/home/$USERNAME/mvx-api-deployer/configurationFiles/external.toml"
-    local nodes_base_dir="~/elrond-nodes"
+    local nodes_base_dir="$HOME/elrond-nodes"
 
     # Ensure the source file exists
     if [ ! -f "$source_file" ]; then

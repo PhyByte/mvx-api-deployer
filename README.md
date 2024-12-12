@@ -69,9 +69,12 @@ Currently, the deployment is configured with default settings. As development pr
 
 ## **2 - Install Services**
 
-At the end of the previous step you should be logged in as the `mvx-api` user. If not, switch to the `mvx-api` user before to continue.
+At the end of the previous step you should be logged in as the `mvx-api` user. If not, switch to the `mvx-api` user before to continue with:
+```bash
+   su - mvx-api
+```
 
-As you already configured the `config.cfg` file, you can now deploy the infrastructure by running: 
+As you already configured the `config.cfg` file, you can now deploy the infrastructure immediatly by running: 
 ```bash
    cd ~/mvx-api-deployer
    ./2-Install.sh
@@ -82,4 +85,14 @@ As you already configured the `config.cfg` file, you can now deploy the infrastr
 - Setup the Observing Squad with `ElasticSearch Indexer Enabled`.
 - Setup the ElasticSearch Indexer and deploy the ElasticSearch Database with Kibana.
 - Setup the MultiversX API.
+
+
+
+## **3 - Start Services**
+
+After the installation is complete, you can start the services by running:
+```bash
+   cd ~/mvx-api-deployer
+   ./3-Start.sh
+```
 
