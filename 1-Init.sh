@@ -5,7 +5,7 @@ source config.cfg
 
 # Import scripts for the different scripts
 source scripts/0-common.sh
-source scripts/1-prepare-server.sh
+source scripts/1-server.sh
 
 # ---------------------------------------------------------
 #   Check Configuration & Machine Specifications
