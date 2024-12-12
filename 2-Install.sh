@@ -20,3 +20,8 @@ ObsSquad_Install
 
 # Activate Indexer configuration for nodes
 ObsSquad_Activate_Indexer
+
+
+# ---------------------------------------------------------
+#        Install MultiversX Indexer
+# ---------------------------------------------------------
