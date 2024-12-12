@@ -32,4 +32,7 @@ EsIndexer_Create_Service
 #   Install MultiversX API
 # ---------------------------------------------------------
 Log-Step "Install MultiversX API"
-MxApi_Install
+MxApi_Prepare_Environment
+MxApi_Install_Npm
+MxApi_Install_Dependencies
+MxApi_Initialize

@@ -31,9 +31,9 @@ Log-Step() {
     local border=$(printf '%*s' "$line_length" '' | tr ' ' '-')
 
     # Print the formatted step with borders and spacing
-    echo -e "\n--\n--\n$RED$border$COLOR_OFF"
-    echo -e "$RED$step_text$COLOR_OFF"
-    echo -e "$RED$border$COLOR_OFF\n--\n--"
+    echo -e $RED"\n--\n--\n$RED$border"
+    echo -e "$step_text"
+    echo -e "$border\n--\n--$COLOR_OFF"
 
     # Increment step number and reset sub-step number
     let STEP_NUM=(${STEP_NUM} + 1)
@@ -45,7 +45,7 @@ Log-SubStep() {
     local sub_step_text="--- $SUB_STEP_NUM/   $1"
 
     # Print the formatted sub-step
-    echo -e "\n--\n$GREEN$sub_step_text$COLOR_OFF\n--"
+    echo -e "$GREEN\n--\n$sub_step_text\n--$COLOR_OFF"
 
     # Increment sub-step number
     let SUB_STEP_NUM=(${SUB_STEP_NUM} + 1)

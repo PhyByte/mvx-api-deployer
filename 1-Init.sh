@@ -29,5 +29,5 @@ Transfer_Repository
 
 #  Step 5: Login to the new user
 sudo su - $USERNAME
-cd $HOME/mvx-api-deployer
+
 # From here, the user will have to run the second script to trigger the installation of the different services.

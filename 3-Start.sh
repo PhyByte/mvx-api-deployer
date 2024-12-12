@@ -5,28 +5,10 @@ source config.cfg
 
 # Import scripts for the different scripts
 source scripts/0-common.sh
+source scripts/5-start-services.sh
 
-Log-Step "Start Observing Squad"
-
-
-# Prepare the Observing Squad environment
-ObsSquad_Prepare_Environment
-
-# Install the Observing Squad
-ObsSquad_Install
-
-# Activate Indexer configuration for nodes
-ObsSquad_Activate_Indexer
-
-# ---------------------------------------------------------
-#        Install MultiversX Indexer
-# ---------------------------------------------------------
-Log-Step "Install MultiversX Indexer"
-EsIndexer_Install
-
-
-# ---------------------------------------------------------
-#        Install MultiversX API
-# ---------------------------------------------------------
-Log-Step "Install MultiversX API"
-MxApi_Install
+# Start all services
+ObsSquad_Start
+EsIndexer_Start
+EsKibana_Start
+MxApi_Start
