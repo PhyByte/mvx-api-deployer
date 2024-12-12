@@ -1,0 +1,24 @@
+#
+#   This .bashrc part is dedicated to the management of you MultiversX API Services 
+#
+
+
+#------------------------------------------------------------
+#                Observing Squad Commands
+#------------------------------------------------------------
+
+alias monitoring-0="$HOME/elrond-utils/termui --address localhost:8080"
+alias monitoring-1="$HOME/elrond-utils/termui --address localhost:8081"
+alias monitoring-2="$HOME/elrond-utils/termui --address localhost:8082"
+alias monitoring-3="$HOME/elrond-utils/termui --address localhost:8083"
+alias monitoring-proxy="journalctl -f -u elrond-proxy.service"
+
+# ----------- Start & Stop the Node(s) present on the machine
+alias start-node="$HOME/mx-chain-scripts/script.sh start"
+alias stop-node="$HOME/mx-chain-scripts/script.sh stop"
+
+#------------------------------------------------------------
+#                   Generic User Configuration
+#------------------------------------------------------------
+alias ll="ls -lah"
+alias ..="cd .."
