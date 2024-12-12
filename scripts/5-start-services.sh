@@ -8,6 +8,8 @@ ObsSquad_Stop() {
    $HOME/mx-chain-scripts/scripts stop_all
 }
 
+
+
 EsIndexer_Start() {
    Log-Step "Start ElasticSearch Indexer"
 
@@ -48,6 +50,8 @@ EsIndexer_Stop() {
       return 1
    fi
 }
+
+
 EsKibana_Start() {
    Log-Step "Start ElasticSearch and Kibana using Docker Compose"
 
@@ -99,6 +103,9 @@ EsKibana_Stop() {
 
    Log "ElasticSearch and Kibana services stopped successfully."
 }
+
+
+
 
 MxApi_Start() {
    Log-Step "Start MultiversX API Service"
