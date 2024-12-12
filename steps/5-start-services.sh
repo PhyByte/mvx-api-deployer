@@ -1,4 +1,0 @@
-
-ObsSquad_Start() {
-    
-}

@@ -1,16 +1,17 @@
 # MultiversX API Deployer
 
-This repository provides tools to quickly deploy a complete infrastructure with Docker Compose to run the MultiversX API. The setup is designed with minimal configuration requirements to enable rapid deployment on any server.
+Effortlessly deploy a complete infrastructure to run your own **MultiversX API** in just a few steps. This repository streamlines the entire process, eliminating complex configurations and providing a rapid setup solution for any server.
 
-We simplified the procedure and automated the deployment process to make it accessible to a wider audience. The deployment includes all necessary components to access blockchain data and run queries on your own.
+With a focus on simplicity and automation, this deployment is designed to make the MultiversX API accessible to everyone. Whether you’re a blockchain enthusiast or a seasoned developer, you can have a fully operational API in no time. No need to gather resources from multiple repositories—everything you need is here in one place.
 
-You will need to run 3 commands to deploy the infrastructure:
-1. **Initialize the server**: Setup requirements and create a new user for running services.
-2. **Deploy the infrastructure**: Install the different services and configure their environments
-3. **Start the services**: Run the services and expose the API for external access.
+### **Quick Start**
+Deploying the infrastructure is as simple as running three commands:
+1. **Initialize the server**: Set up the requirements and create a dedicated user for running services.
+2. **Deploy the infrastructure**: Install the necessary services and configure the environment.
+3. **Start the services**: Launch the components and expose the API for external access.
 
 
-
+Having a complete API usually requiered a lot of steps from a lot of repositoties, here you have it all in one place.
 
 ### **This deployment includes:**
 - [**An Observing Squad**](https://docs.multiversx.com/integrators/observing-squad ): Access blockchain data by running observer nodes.

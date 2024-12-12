@@ -1,0 +1,13 @@
+[Unit]
+Description=ElasticSearch Indexer Service
+After=network.target
+
+[Service]
+Type=simple
+ExecStart=/home/mvx-api/mx-chain-es-indexer-go/cmd/elasticindexer/elasticindexer
+WorkingDirectory=/home/mvx-api/mx-chain-es-indexer-go/cmd/elasticindexer
+Restart=on-failure
+User=mvx-api
+
+[Install]
+WantedBy=multi-user.target

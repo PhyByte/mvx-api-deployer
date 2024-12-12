@@ -24,7 +24,7 @@ ObsSquad_Prepare_Environment() {
     sed -i "s/^CUSTOM_USER=.*$/CUSTOM_USER=\"$USERNAME\"/" "$config_file"
 
     Log "Updated variables.cfg:"
-    grep -E "ENVIRONMENT|CUSTOM_HOME|CUSTOM_USER" "$config_file"
+    # grep -E "ENVIRONMENT|CUSTOM_HOME|CUSTOM_USER" "$config_file"
 }
 
 # Function that install the observing squad and press enter to all the questions

@@ -14,8 +14,16 @@ alias monitoring-3="$HOME/elrond-utils/termui --address localhost:8083"
 alias monitoring-proxy="journalctl -f -u elrond-proxy.service"
 
 # ----------- Start & Stop the Node(s) present on the machine
-alias start-node="$HOME/mx-chain-scripts/script.sh start"
-alias stop-node="$HOME/mx-chain-scripts/script.sh stop"
+alias start-observing_squad="$HOME/mx-chain-scripts/script.sh start"
+alias stop-observing_squad="$HOME/mx-chain-scripts/script.sh stop"
+
+
+#------------------------------------------------------------
+#                MultiversX Indexer Commands
+#------------------------------------------------------------
+alias start-indexer="$HOME/mx-chain-es-indexer-go/cmd/elasticindexer/elasticindexer"
+alias stop-indexer="$HOME/mx-chain-scripts/script.sh stop-indexer"
+
 
 #------------------------------------------------------------
 #                   Generic User Configuration
