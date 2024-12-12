@@ -61,7 +61,7 @@ ObsSquad_Activate_Indexer() {
     Log-SubStep "Activate Indexer Configuration for Nodes"
 
     # Define base paths
-    local source_file="~/mvx-api-deployer/configurationFiles/external.toml"
+    local source_file="/home/$USERNAME/mvx-api-deployer/configurationFiles/external.toml"
     local nodes_base_dir="~/elrond-nodes"
 
     # Ensure the source file exists

@@ -1,9 +1,7 @@
 #
-#   This .bashrc part is for the MX Nodes owner Commands 
+#   This .bashrc part is dedicated to the management of you MultiversX API Services 
 #
 
-# Source the variables into the environment when bash start.
-source $HOME/mvx-api-deployer/config/config.cfg
 
 #------------------------------------------------------------
 #                Observing Squad Commands
