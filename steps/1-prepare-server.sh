@@ -100,7 +100,7 @@ Install_Prerequisites_And_Create_User() {
 
     Log-SubStep "Ensure .bashrc is sourced in .bash_profile"
     # Ensure .bashrc is sourced in the user's .bash_profile
-    echo "source /home/$USERNAME/.bashrc" >>/home/$USERNAME/.bash_profile
+    echo "source /home/$USERNAME/.bashrc" >>/home/$USERNAME/.bashrc
 
     Log-SubStep "Reload the new user's .bashrc file"
     # Reload the .bashrc file to apply the changes
