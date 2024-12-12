@@ -1,5 +1,5 @@
 ObsSquad_Prepare_Environment() {
-    Log-Step "Prepare Observing Squad Environment"
+    Log-SubStep "Prepare Observing Squad Environment"
 
     # Step 1: Clone the MultiversX chain scripts repository
     local repo_dir="$HOME/mx-chain-scripts"
@@ -18,7 +18,7 @@ ObsSquad_Prepare_Environment() {
         return 1
     fi
 
-    Log-SubStep "Update variables.cfg with custom values"
+    # Replace variables in the configuration file
     sed -i "s/^ENVIRONMENT=\".*\"/ENVIRONMENT=\"$NETWORK\"/" "$config_file"
     sed -i "s|^CUSTOM_HOME=.*|CUSTOM_HOME=\"$HOME\"|" "$config_file"
     sed -i "s/^CUSTOM_USER=.*$/CUSTOM_USER=\"$USERNAME\"/" "$config_file"
@@ -29,7 +29,7 @@ ObsSquad_Prepare_Environment() {
 
 # Function that install the observing squad and press enter to all the questions
 ObsSquad_Install() {
-    Log-Step "Install Observing Squad"
+    Log-SubStep "Install Observing Squad"
 
     local script_dir="$HOME/mx-chain-scripts"
     local script_file="$script_dir/script.sh"
@@ -58,7 +58,7 @@ ObsSquad_Install() {
 
 # Function that copy the external.toml file to the different node folders
 ObsSquad_Activate_Indexer() {
-    Log-Step "Activate Indexer Configuration for Nodes"
+    Log-SubStep "Activate Indexer Configuration for Nodes"
 
     # Define base paths
     local source_file="~/mvx-api-deployer/configurationFiles/external.toml"
