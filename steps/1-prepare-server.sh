@@ -68,7 +68,7 @@ Transfer_Repository() {
     Log-Step "Transfer the ressources to the newly created user"
     Log-SubStep "Transfer the main repository to the new user's home directory"
     # Copy the current repository to the new user's home directory
-    sudo cp -r $(pwd) /home/$USERNAME/mvx-api-deployer
+    sudo cp -r ~/mvx-api-deployer /home/$USERNAME/mvx-api-deployer
 
     Log-SubStep "Change ownership of the repository to the new user"
     # Change the ownership of the repository to the new user
@@ -76,8 +76,7 @@ Transfer_Repository() {
 
     Log-SubStep "Remove the old repository from the current user"
     # Remove the repository from the current user's home directory to avoid duplication
-    cd
-    rm -rf /mvx-api-deployer
+    rm -rf ~/mvx-api-deployer
 
     # Append the custom bashrc configuration to the new user's .bashrc file
     if [ -f "/home/$USERNAME/mvx-api-deployer/configurationFiles/bashrc" ]; then

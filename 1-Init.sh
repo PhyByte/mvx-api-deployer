@@ -24,7 +24,10 @@ Install_Docker
 #  Step 3: Create a new user with Docker access
 Create_User
 
-#  Step 4: Login to the new user
+#  Step 4: Transfer The repository to the newly created user
+Transfer_Repository
+
+#  Step 5: Login to the new user
 sudo su - $USERNAME
 
 # From here, the user will have to run the second script to trigger the installation of the different services.
