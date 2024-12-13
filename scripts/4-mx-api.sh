@@ -133,13 +133,3 @@ MxApi_Check_Status() {
         sudo journalctl -u multiversx-api.service --since "5 minutes ago"
     fi
 }
-
-# Main function to install and setup MultiversX API
-MxApi_Install_All() {
-    MxApi_Prepare_Environment
-    MxApi_Install_Npm
-    MxApi_Install_Dependencies
-    MxApi_Initialize
-    MxApi_Setup_Service
-    MxApi_Check_Status
-}

@@ -79,10 +79,5 @@ stop_mx_api() {
 #                   Generic User Configuration
 #------------------------------------------------------------
 
-ll() {
-    ls -lah
-}
-
-..() {
-    cd ..
-}
+alias ll="ls -lah"
+alias ..="cd .."

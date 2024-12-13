@@ -40,6 +40,8 @@ MxApi_Prepare_Environment
 MxApi_Install_Npm
 MxApi_Install_Dependencies
 MxApi_Initialize
+MxApi_Setup_Service
+MxApi_Check_Status
 
 # ---------------------------------------------------------
 #   Next instructions for the User
