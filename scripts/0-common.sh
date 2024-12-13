@@ -1,82 +1,100 @@
 # ---------------------------------------------------------
-# This file contains common functions and variables that are used in the deployment scripts.
-# ---------------------------------------------------------
-
-# ---------------------------------------------------------
-# Log Functions
+# Common Utilities and Logging Functions
 # ---------------------------------------------------------
 
 # --------- COLORS ---------
 # Reset
-COLOR_OFF='\033[0m' # Text Reset
+COLOR_OFF='\033[0m' # Reset text color
 
-# Regular Colors
-BLACK='\033[0;30m'  # Black
-RED='\033[0;31m'    # Red
-GREEN='\033[0;32m'  # Green
-YELLOW='\033[0;33m' # Yellow
-BLUE='\033[0;34m'   # Blue
-PURPLE='\033[0;35m' # Purple
-CYAN='\033[0;36m'   # Cyan
-WHITE='\033[0;37m'  # White
+# Text Colors
+BLACK='\033[0;30m'
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[0;33m'
+BLUE='\033[0;34m'
+PURPLE='\033[0;35m'
+CYAN='\033[0;36m'
+WHITE='\033[0;37m'
 
-# This function is use to print the main steps of the procedure.
+# Logs numbering
+TITLE_NUM=1
 STEP_NUM=1
 SUB_STEP_NUM=1
 
+# --------- LOGGING FUNCTIONS ---------
+
+# Log a title
+Log-Title() {
+    # Format and print a title
+    local title_text="|    $TITLE_NUM/   $1    |"
+    local border=$(printf '%*s' "${#title_text}" '' | tr ' ' '-')
+
+    echo -e $PURPLE"\n--\n--\n$border"
+    echo -e "$title_text"
+    echo -e "$border\n--\n--\n$COLOR_OFF"
+
+    # Increment the title number
+    ((TITLE_NUM++))
+}
+
+# Log a main step
 Log-Step() {
-    # Construct the title text with numbering
-    local step_text="|    $STEP_NUM/   $1    |"
-    local line_length=${#step_text}
-    local border=$(printf '%*s' "$line_length" '' | tr ' ' '-')
+    # Format and print a main step title
+    local step_text="|    $TITLE_NUM.$STEP_NUM   $1    |"
+    local border=$(printf '%*s' "${#step_text}" '' | tr ' ' '-')
 
-    # Print the formatted step with borders and spacing
-    echo -e $RED"\n--\n--\n$RED$border"
+    echo -e $BLUE"\n--\n$border"
     echo -e "$step_text"
-    echo -e "$border\n--\n--$COLOR_OFF"
+    echo -e "$border\n--\n$COLOR_OFF"
 
-    # Increment step number and reset sub-step number
-    let STEP_NUM=(${STEP_NUM} + 1)
-    let SUB_STEP_NUM=1
+    # Increment the step number and reset the sub-step number
+    ((STEP_NUM++))
+    SUB_STEP_NUM=1
 }
 
+# Log a sub-step
 Log-SubStep() {
-    # Construct the sub-step text with numbering
-    local sub_step_text="--- $SUB_STEP_NUM/   $1"
+    # Format and print a sub-step title
+    local sub_step_text="--- $TITLE_NUM.$STEP_NUM.$SUB_STEP_NUM/   $1"
 
-    # Print the formatted sub-step
-    echo -e "$GREEN\n--\n$sub_step_text\n--$COLOR_OFF"
+    echo -e "$CYAN\n--\n$sub_step_text\n--$COLOR_OFF"
 
-    # Increment sub-step number
-    let SUB_STEP_NUM=(${SUB_STEP_NUM} + 1)
+    # Increment the sub-step number
+    ((SUB_STEP_NUM++))
 }
+
+# General log for informational messages
 Log() {
     echo -e "\n$BLUE - $1  $COLOR_OFF\n"
 }
 
+# Log a warning message
 Log-Warning() {
     echo -e "\n${YELLOW} WARNING:  $1 $COLOR_OFF\n"
 }
 
+# Log an error message
 Log-Error() {
     echo -e "\n${RED} ERROR:    $1 $COLOR_OFF\n"
 }
 
 # ---------------------------------------------------------
+# Configuration Validation
+# ---------------------------------------------------------
 
-# Verify if the configuration variables are properly set
+# Verify that mandatory variables are set
 Verify_Configuration() {
-    # Variable to track errors
+    Log-Step "Validate Configuration"
+    # Track if any errors are found
     ERROR_FOUND=false
 
-    Log-Step "Verifying configuration variables"
-
-    # Check if the mandatory variables are set before proceeding
+    # Check USERNAME
     if [ -z "$USERNAME" ]; then
         Log-Error "The USERNAME variable is not set in the configuration file."
         ERROR_FOUND=true
     fi
 
+    # Check NETWORK
     if [ -z "$NETWORK" ]; then
         Log-Error "The NETWORK variable is not set in the configuration file."
         ERROR_FOUND=true
@@ -85,7 +103,7 @@ Verify_Configuration() {
         ERROR_FOUND=true
     fi
 
-    # Check if any error was found
+    # Exit if errors are found
     if [ "$ERROR_FOUND" = true ]; then
         Log-Error "Configuration verification failed. Please fix the errors above."
         exit 1

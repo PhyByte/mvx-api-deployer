@@ -1,3 +1,10 @@
+# ---------------------------------------------------------
+# MultiversX API Deployer - Server Preparation Functions
+# ---------------------------------------------------------
+
+# --------- FUNCTIONS ---------
+
+# Upgrade the system's packages
 Upgrade_System() {
     Log-Step "Upgrade the system's packages"
     Log-SubStep "Update the package list"
@@ -9,6 +16,7 @@ Upgrade_System() {
     sudo apt-get upgrade -y
 }
 
+# Install Docker and Docker Compose
 Install_Docker() {
     Log-Step "Install Docker and Docker Compose"
     Log-SubStep "Install prerequisites for Docker"
@@ -45,6 +53,7 @@ Install_Docker() {
     docker-compose --version
 }
 
+# Create a new user with Docker access
 Create_User() {
     Log-Step "Create a new user with Docker access"
     Log-SubStep "Create a new user"
@@ -64,6 +73,7 @@ Create_User() {
     sudo usermod -aG docker $USERNAME
 }
 
+# Transfer the repository to the new user
 Transfer_Repository() {
     Log-Step "Transfer the ressources to the newly created user"
     Log-SubStep "Transfer the main repository to the new user's home directory"

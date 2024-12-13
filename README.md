@@ -14,11 +14,11 @@ Deploying the infrastructure is as simple as running three commands:
 Having a complete API usually requiered a lot of steps from a lot of repositoties, here you have it all in one place.
 
 ### **This deployment includes:**
-- [**An Observing Squad**](https://docs.multiversx.com/integrators/observing-squad ): Access blockchain data by running observer nodes.
+- [**An Observing Squad**](https://docs.multiversx.com/integrators/observing-squad): Access blockchain data by running observer nodes.
 - [**ElasticSearch Indexer**](https://docs.multiversx.com/sdk-and-tools/indexer/#observer-client): Convert raw blockchain data for efficient querying.
 - [**ElasticSearch Database**](https://github.com/elastic/elasticsearch): Store the converted blockchain data.
 - [**Kibana**](https://github.com/elastic/kibana): Visualize data and logs from the blockchain.
-- [**MultiversX API**](https://docs.multiversx.com/sdk-and-tools/rest-api/multiversx-api/): Query blockchain data externally via a standard API.
+- [**MultiversX API**](https://docs.multiversx.com/sdk-and-tools/rest-api/multiversx-api): Query blockchain data externally via a standard API.
 
 
 ## **0 - Prerequisites**

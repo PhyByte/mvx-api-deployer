@@ -1,5 +1,9 @@
 #!/bin/bash
 
+# ---------------------------------------------------------
+# MultiversX API Deployer - Install Required Services
+# ---------------------------------------------------------
+
 # Load variables from configuration File
 source config.cfg
 
@@ -12,7 +16,7 @@ source scripts/4-mx-api.sh
 # ---------------------------------------------------------
 #   Install Observing Squad
 # ---------------------------------------------------------
-Log-Step "Install Observing Squad"
+Log-Title "Install Observing Squad"
 
 ObsSquad_Prepare_Environment
 ObsSquad_Install
@@ -21,7 +25,7 @@ ObsSquad_Activate_Indexer
 # ---------------------------------------------------------
 #   Install ElasticSearch Indexer
 # ---------------------------------------------------------
-Log-Step "Install ElasticSearch Indexer"
+Log-Title "Install ElasticSearch Indexer"
 
 EsIndexer_Prepare_Environment
 EsIndexer_Install_Go
@@ -31,8 +35,16 @@ EsIndexer_Create_Service
 # ---------------------------------------------------------
 #   Install MultiversX API
 # ---------------------------------------------------------
-Log-Step "Install MultiversX API"
+Log-Title "Install MultiversX API"
 MxApi_Prepare_Environment
 MxApi_Install_Npm
 MxApi_Install_Dependencies
 MxApi_Initialize
+
+# ---------------------------------------------------------
+#   Next instructions for the User
+# ---------------------------------------------------------
+
+Log-Title "All services installed successfully"
+Log "Proceed with the next step to start all the services by running:"
+Log "  ./3-Start.sh"

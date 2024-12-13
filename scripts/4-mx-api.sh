@@ -1,6 +1,12 @@
+
+# ---------------------------------------------------------
+# MultiversX API Service Installation Functions
+# Official Link: https://docs.multiversx.com/sdk-and-tools/rest-api/multiversx-api
+# ---------------------------------------------------------
+
 # Function to prepare the MultiversX API environment
 MxApi_Prepare_Environment() {
-    Log-SubStep "Prepare MultiversX API Environment"
+    Log-Step "Prepare MultiversX API Environment"
 
     local repo_url="https://github.com/multiversx/mx-api-service.git"
     local repo_dir="$HOME/mx-api-service"
@@ -18,7 +24,7 @@ MxApi_Prepare_Environment() {
 
 # Function to install npm if not already installed
 MxApi_Install_Npm() {
-    Log-SubStep "Install Npm"
+    Log-Step "Install Npm"
 
     if ! command -v npm &>/dev/null; then
         Log "Installing Npm..."
@@ -33,7 +39,7 @@ MxApi_Install_Npm() {
 
 # Function to install dependencies for the MultiversX API
 MxApi_Install_Dependencies() {
-    Log-SubStep "Install MultiversX API dependencies"
+    Log-Step "Install MultiversX API dependencies"
 
     local repo_dir="$HOME/mx-api-service"
 
@@ -52,7 +58,7 @@ MxApi_Install_Dependencies() {
 
 # Function to initialize the MultiversX API
 MxApi_Initialize() {
-    Log-SubStep "Initialize the MultiversX API plugin structure"
+    Log-Step "Initialize the MultiversX API plugin structure"
 
     local repo_dir="$HOME/mx-api-service"
 
