@@ -1,33 +1,51 @@
 #!/bin/bash
 
-# Load variables from configuration File
+# ---------------------------------------------------------
+# MultiversX API Deployer - Initialize the Server
+# ---------------------------------------------------------
+
+# Load configuration variables
 source config.cfg
 
-# Import scripts for the different scripts
+# Import common functions and server preparation scripts
 source scripts/0-common.sh
 source scripts/1-server.sh
 
+Log-Title "MultiversX API Deployer - Initialize the Server"
 # ---------------------------------------------------------
-#   Check Configuration & Machine Specifications
+# Validate Configuration and Machine Specifications
 # ---------------------------------------------------------
 Verify_Configuration
 
 # ---------------------------------------------------------
-#               Prepare Machine
+# Upgrade System Packages
 # ---------------------------------------------------------
-#  Step 1: Upgrade the system's packages
 Upgrade_System
 
-#  Step 2: Install Docker and Docker Compose
+# ---------------------------------------------------------
+# Install Docker and Docker Compose
+# ---------------------------------------------------------
 Install_Docker
 
-#  Step 3: Create a new user with Docker access
+# ---------------------------------------------------------
+# Create a New User for Running Services
+# ---------------------------------------------------------
 Create_User
 
-#  Step 4: Transfer The repository to the newly created user
+# ---------------------------------------------------------
+# Transfer Repository to the New User
+# ---------------------------------------------------------
 Transfer_Repository
 
-#  Step 5: Login to the new user
+# ---------------------------------------------------------
+# Switch to the New User
+# ---------------------------------------------------------
 sudo su - $USERNAME
 
-# From here, the user will have to run the second script to trigger the installation of the different services.
+# ---------------------------------------------------------
+# Instructions for the User
+# ---------------------------------------------------------
+Log-Title "Server Initialization Completed"
+Log "You are now logged in as $USERNAME. Please proceed with the next script to install the required services by running:"
+Log "  cd $HOME/mvx-api-deployer"
+Log "  ./2-Install.sh"

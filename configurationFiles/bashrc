@@ -2,7 +2,9 @@
 #   This .bashrc part is dedicated to the management of you MultiversX API Services 
 #
 
-
+source $HOME/mvx-api-deployer/config.cfg 
+source $HOME/mvx-api-deployer/0-common.sh
+source $HOME/mvx-api-deployer/5-manage-services.sh
 #------------------------------------------------------------
 #                Observing Squad Commands
 #------------------------------------------------------------

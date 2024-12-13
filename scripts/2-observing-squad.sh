@@ -1,35 +1,37 @@
-ObsSquad_Prepare_Environment() {
-    Log-SubStep "Prepare Observing Squad Environment"
+# ---------------------------------------------------------
+# Observing Squad Installation Functions
+# Official Link: https://docs.multiversx.com/integrators/observing-squad
+# ---------------------------------------------------------
 
-    # Step 1: Clone the MultiversX chain scripts repository
+# Prepare the Observing Squad Environment
+ObsSquad_Prepare_Environment() {
+    Log-Step "Prepare Observing Squad Environment"
+
     local repo_dir="$HOME/mx-chain-scripts"
     local config_file="$repo_dir/config/variables.cfg"
 
     if [ ! -d "$repo_dir" ]; then
-        Log "Cloning MultiversX chain scripts repository into $repo_dir"
+        Log-SubStep "Clone the MultiversX chain scripts repository"
         git clone https://github.com/multiversx/mx-chain-scripts.git "$repo_dir"
     else
         Log "Repository already cloned. Skipping clone step."
     fi
 
-    # Step 2: Modify variables.cfg
+    Log-SubStep "Replace variables in the configuration file (variables.cfg)."
     if [ ! -f "$config_file" ]; then
         Log-Error "Configuration file $config_file not found. Exiting."
         return 1
     fi
 
-    # Replace variables in the configuration file
     sed -i "s/^ENVIRONMENT=\".*\"/ENVIRONMENT=\"$NETWORK\"/" "$config_file"
     sed -i "s|^CUSTOM_HOME=.*|CUSTOM_HOME=\"$HOME\"|" "$config_file"
     sed -i "s/^CUSTOM_USER=.*$/CUSTOM_USER=\"$USERNAME\"/" "$config_file"
 
-    Log "Updated variables.cfg:"
-    # grep -E "ENVIRONMENT|CUSTOM_HOME|CUSTOM_USER" "$config_file"
 }
 
 # Function that install the observing squad and press enter to all the questions
 ObsSquad_Install() {
-    Log-SubStep "Install Observing Squad"
+    Log-Step "Install Observing Squad"
 
     local script_dir="$HOME/mx-chain-scripts"
     local script_file="$script_dir/script.sh"
@@ -58,7 +60,7 @@ ObsSquad_Install() {
 
 # Function that copy the external.toml file to the different node folders
 ObsSquad_Activate_Indexer() {
-    Log-SubStep "Activate Indexer Configuration for Nodes"
+    Log-Step "Activate Indexer Configuration for Nodes"
 
     # Define base paths
     local source_file="/home/$USERNAME/mvx-api-deployer/configurationFiles/external.toml"
@@ -70,7 +72,7 @@ ObsSquad_Activate_Indexer() {
         return 1
     fi
 
-    # Replace external.toml for each node
+    Log-SubStep "Replace external.toml for each node."
     for node in node-{0..3}; do
         local target_dir="$nodes_base_dir/$node/config"
         if [ -d "$target_dir" ]; then
