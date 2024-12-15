@@ -8,46 +8,54 @@ source $HOME/mvx-api-deployer/scripts/0-common.sh
 source $HOME/mvx-api-deployer/scripts/5-manage-services.sh
 
 #------------------------------------------------------------
+#                Service Status Commands
+#------------------------------------------------------------
+
+api_check_status() {
+    Check_All_Status
+}
+
+#------------------------------------------------------------
 #                Observing Squad Commands
 #------------------------------------------------------------
 
-monitoring_0() {
-    $HOME/elrond-utils/termui --address localhost:8080
-}
-
-monitoring_1() {
-    $HOME/elrond-utils/termui --address localhost:8081
-}
-
-monitoring_2() {
-    $HOME/elrond-utils/termui --address localhost:8082
-}
-
-monitoring_3() {
-    $HOME/elrond-utils/termui --address localhost:8083
-}
-
-monitoring_proxy() {
-    journalctl -f -u elrond-proxy.service
-}
-
-start_observing_squad() {
+api_obssquad_start() {
     ObsSquad_Start
 }
 
-stop_observing_squad() {
+api_obssquad_stop() {
     ObsSquad_Stop
+}
+
+api_obssquad_monitoring_0() {
+    $HOME/elrond-utils/termui --address localhost:8080
+}
+
+api_obssquad_monitoring_1() {
+    $HOME/elrond-utils/termui --address localhost:8081
+}
+
+api_obssquad_monitoring_2() {
+    $HOME/elrond-utils/termui --address localhost:8082
+}
+
+api_obssquad_monitoring_3() {
+    $HOME/elrond-utils/termui --address localhost:8083
+}
+
+api_obssquad_monitoring_proxy() {
+    journalctl -f -u elrond-proxy.service
 }
 
 #------------------------------------------------------------
 #                MultiversX Indexer Commands
 #------------------------------------------------------------
 
-start_indexer() {
+api_indexer_start() {
     EsIndexer_Start
 }
 
-stop_indexer() {
+api_indexer_stop() {
     EsIndexer_Stop
 }
 
@@ -55,11 +63,11 @@ stop_indexer() {
 #                ElasticSearch and Kibana Commands
 #------------------------------------------------------------
 
-start_es_kibana() {
+api_eskibana_start() {
     EsKibana_Start
 }
 
-stop_es_kibana() {
+api_eskibana_stop() {
     EsKibana_Stop
 }
 
@@ -67,11 +75,11 @@ stop_es_kibana() {
 #                MultiversX API Commands
 #------------------------------------------------------------
 
-start_mx_api() {
+api_mx_api_start() {
     MxApi_Start
 }
 
-stop_mx_api() {
+api_mx_api_stop() {
     MxApi_Stop
 }
 
