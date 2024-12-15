@@ -81,8 +81,8 @@ ObsSquad_Start() {
 
    local script_dir="$HOME/mx-chain-scripts/scripts"
 
-   if [ -x "$script_dir/start_all" ]; then
-      "$script_dir/start_all" || {
+   if [ -x "$script_dir" ]; then
+      "$script_dir start_all" || {
          Log-Error "Failed to start Observing Squad. Check logs for details."
          return 1
       }
@@ -99,8 +99,8 @@ ObsSquad_Stop() {
 
    local script_dir="$HOME/mx-chain-scripts/scripts"
 
-   if [ -x "$script_dir/stop_all" ]; then
-      "$script_dir/stop_all" || {
+   if [ -x "$script_dir" ]; then
+      "$script_dir stop_all" || {
          Log-Error "Failed to stop Observing Squad. Check logs for details."
          return 1
       }
@@ -208,45 +208,39 @@ EsKibana_Stop() {
 MxApi_Start() {
    Log-Step "Start MultiversX API Service"
 
-   local repo_dir="$HOME/mx-api-service"
+   local service_name="multiversx-api"
 
-   if [ ! -d "$repo_dir" ]; then
-      Log-Error "Repository directory $repo_dir does not exist. Ensure the repository was installed correctly."
-      return 1
-   fi
-
-   cd "$repo_dir" || {
-      Log-Error "Failed to navigate to $repo_dir. Ensure the directory exists."
+   Log-SubStep "Starting MultiversX API using systemctl"
+   sudo systemctl start "$service_name" || {
+      Log-Error "Failed to start MultiversX API service. Check logs with 'journalctl -u $service_name'."
       return 1
    }
 
-   Log-SubStep "Start the API in production mode"
-   npm run start:prod &
+   sudo systemctl status "$service_name" --no-pager || {
+      Log-Error "MultiversX API service is not running as expected. Check logs with 'journalctl -u $service_name'."
+      return 1
+   }
 
-   local pid=$!
-   echo "$pid" >"$repo_dir/mx-api.pid"
-   Log "MultiversX API started successfully with PID $pid."
+   Log "MultiversX API service started successfully."
 }
 
 # Stop the MultiversX API
 MxApi_Stop() {
    Log-Step "Stop MultiversX API Service"
 
-   local repo_dir="$HOME/mx-api-service"
-   local pid_file="$repo_dir/mx-api.pid"
+   local service_name="multiversx-api"
 
-   if [ ! -f "$pid_file" ]; then
-      Log-Warning "PID file not found. The API might not be running."
+   Log-SubStep "Stopping MultiversX API using systemctl"
+   sudo systemctl stop "$service_name" || {
+      Log-Error "Failed to stop MultiversX API service. Check logs with 'journalctl -u $service_name'."
       return 1
-   fi
+   }
 
-   local pid
-   pid=$(cat "$pid_file")
-   if kill -9 "$pid" &>/dev/null; then
-      Log "MultiversX API stopped successfully."
-      rm -f "$pid_file"
+   sudo systemctl status "$service_name" --no-pager | grep "inactive (dead)" &>/dev/null
+   if [ $? -eq 0 ]; then
+      Log "MultiversX API service stopped successfully."
    else
-      Log-Error "Failed to stop the MultiversX API. The process may not be running."
+      Log-Error "MultiversX API service is still running. Please check manually."
       return 1
    fi
 }

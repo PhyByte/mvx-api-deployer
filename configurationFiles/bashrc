@@ -1,34 +1,91 @@
 #
-#   This .bashrc part is dedicated to the management of you MultiversX API Services 
+#   This .bashrc part is dedicated to the management of your MultiversX API Services 
 #
 
-source $HOME/mvx-api-deployer/config.cfg 
-source $HOME/mvx-api-deployer/0-common.sh
-source $HOME/mvx-api-deployer/5-manage-services.sh
+# Import necessary scripts
+source $HOME/mvx-api-deployer/config.cfg
+source $HOME/mvx-api-deployer/scripts/0-common.sh
+source $HOME/mvx-api-deployer/scripts/5-manage-services.sh
+
+#------------------------------------------------------------
+#                Service Status Commands
+#------------------------------------------------------------
+
+api_check_status() {
+    Check_All_Status
+}
+
 #------------------------------------------------------------
 #                Observing Squad Commands
 #------------------------------------------------------------
 
-alias monitoring-0="$HOME/elrond-utils/termui --address localhost:8080"
-alias monitoring-1="$HOME/elrond-utils/termui --address localhost:8081"
-alias monitoring-2="$HOME/elrond-utils/termui --address localhost:8082"
-alias monitoring-3="$HOME/elrond-utils/termui --address localhost:8083"
-alias monitoring-proxy="journalctl -f -u elrond-proxy.service"
+api_obssquad_start() {
+    ObsSquad_Start
+}
 
-# ----------- Start & Stop the Node(s) present on the machine
-alias start-observing_squad="$HOME/mx-chain-scripts/script.sh start"
-alias stop-observing_squad="$HOME/mx-chain-scripts/script.sh stop"
+api_obssquad_stop() {
+    ObsSquad_Stop
+}
 
+api_obssquad_monitoring_0() {
+    $HOME/elrond-utils/termui --address localhost:8080
+}
+
+api_obssquad_monitoring_1() {
+    $HOME/elrond-utils/termui --address localhost:8081
+}
+
+api_obssquad_monitoring_2() {
+    $HOME/elrond-utils/termui --address localhost:8082
+}
+
+api_obssquad_monitoring_3() {
+    $HOME/elrond-utils/termui --address localhost:8083
+}
+
+api_obssquad_monitoring_proxy() {
+    journalctl -f -u elrond-proxy.service
+}
 
 #------------------------------------------------------------
 #                MultiversX Indexer Commands
 #------------------------------------------------------------
-alias start-indexer="$HOME/mx-chain-es-indexer-go/cmd/elasticindexer/elasticindexer"
-alias stop-indexer="$HOME/mx-chain-scripts/script.sh stop-indexer"
 
+api_indexer_start() {
+    EsIndexer_Start
+}
+
+api_indexer_stop() {
+    EsIndexer_Stop
+}
+
+#------------------------------------------------------------
+#                ElasticSearch and Kibana Commands
+#------------------------------------------------------------
+
+api_eskibana_start() {
+    EsKibana_Start
+}
+
+api_eskibana_stop() {
+    EsKibana_Stop
+}
+
+#------------------------------------------------------------
+#                MultiversX API Commands
+#------------------------------------------------------------
+
+api_mx_api_start() {
+    MxApi_Start
+}
+
+api_mx_api_stop() {
+    MxApi_Stop
+}
 
 #------------------------------------------------------------
 #                   Generic User Configuration
 #------------------------------------------------------------
+
 alias ll="ls -lah"
 alias ..="cd .."
