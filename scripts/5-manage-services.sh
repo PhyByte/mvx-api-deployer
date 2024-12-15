@@ -79,7 +79,7 @@ Check_All_Status() {
 ObsSquad_Start() {
    Log-Step "Start Observing Squad"
 
-   local script_dir="$HOME/mx-chain-scripts/scripts"
+   local script_dir="$HOME/mx-chain-scripts/script.sh"
 
    if [ -x "$script_dir" ]; then
       "$script_dir start_all" || {
