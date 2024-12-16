@@ -89,7 +89,7 @@ Transfer_Repository() {
     rm -rf ~/mvx-api-deployer
 
     # Append the custom bashrc configuration to the new user's .bashrc file
-    if [ -f "/home/$USERNAME/mvx-api-deployer/configurationFiles/bashrc" ]; then
+    if [ -f "/home/$USERNAME/mvx-api-deployer/configurationFiles/.bashrc" ]; then
         Log "Appending custom bashrc configuration to /home/$USERNAME/.bashrc"
         cat /home/$USERNAME/mvx-api-deployer/configurationFiles/bashrc >>/home/$USERNAME/.bashrc
     else
