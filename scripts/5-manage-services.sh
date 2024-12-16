@@ -102,7 +102,7 @@ ObsSquad_Stop() {
    local script_path="$HOME/mx-chain-scripts/script.sh"
 
    if [ -x "$script_path" ]; then
-      "$script_path stop_all" || {
+      "$script_path" stop_all || {
          Log-Error "Failed to stop Observing Squad. Check logs for details."
          return 1
       }
