@@ -88,13 +88,16 @@ Transfer_Repository() {
     # Remove the repository from the current user's home directory to avoid duplication
     rm -rf ~/mvx-api-deployer
 
-    # Append the custom bashrc configuration to the new user's .bashrc file
+    Log "Repository successfully transferred, and the setup for $USERNAME is complete."
+}
+
+Append_Bashrc() {
+    Log-Step "Append custom bashrc configuration"
+    # Append the custom bashrc configuration to the user's .bashrc file
     if [ -f "/home/$USERNAME/mvx-api-deployer/configurationFiles/bashrc" ]; then
         Log "Appending custom bashrc configuration to /home/$USERNAME/.bashrc"
         cat /home/$USERNAME/mvx-api-deployer/configurationFiles/bashrc >>/home/$USERNAME/.bashrc
     else
         Log-Warning "Custom bashrc file not found in /home/$USERNAME/mvx-api-deployer/configurationFiles/"
     fi
-
-    Log "Repository successfully transferred, and the setup for $USERNAME is complete."
 }
