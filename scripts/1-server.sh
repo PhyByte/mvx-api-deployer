@@ -102,3 +102,69 @@ Append_Bashrc() {
         Log-Warning "Custom bashrc file not found in /home/$USERNAME/mvx-api-deployer/configurationFiles/"
     fi
 }
+
+# ---------------------------------------------------------
+# Zabbix Monitoring Installation and Management Functions
+# ---------------------------------------------------------
+
+zabbixFile="/etc/zabbix/zabbix_agentd.conf"
+zabbix_param[1]="Server"
+zabbix_param[2]="ServerActive"
+zabbix_param[3]="Hostname"
+
+# Install Zabbix Agent
+Install_Zabbix() {
+    Log-Step "Install Zabbix Agent"
+
+    sudo wget -q https://repo.zabbix.com/zabbix/6.0/ubuntu/pool/main/z/zabbix-release/zabbix-release_6.0-6+ubuntu$(lsb_release -rs)_all.deb
+    sudo dpkg -i zabbix-release_6.0-6+ubuntu$(lsb_release -rs)_all.deb
+
+    sudo apt update
+    sudo apt -y install zabbix-agent || {
+        Log-Error "Failed to install Zabbix Agent. Check your network or package manager."
+        return 1
+    }
+
+    Log "Zabbix Agent installed successfully."
+}
+
+# Edit Zabbix Configuration
+Edit_Zabbix_Config() {
+    Log-Step "Edit Zabbix Configuration"
+
+    for PARAM in "${zabbix_param[@]}"; do
+        sed -i '/^'"${PARAM}="'/d' "${zabbixFile}" || {
+            Log-Warning "Failed to remove lines starting with '${PARAM}=' from ${zabbixFile}. Continuing..."
+        }
+    done
+
+    echo "${zabbix_param[1]}=${ZABBIX_SERVER_IP}" >>"${zabbixFile}"
+    echo "${zabbix_param[2]}=${ZABBIX_SERVER_IP}" >>"${zabbixFile}"
+    echo "${zabbix_param[3]}=${HOSTNAME}" >>"${zabbixFile}"
+
+    Log "Zabbix configuration updated successfully."
+
+    Log-SubStep "Open port for Zabbix Agent"
+    sudo ufw allow 10050/tcp || Log-Warning "Failed to open port 10050. Please check your firewall settings."
+}
+
+# Restart Zabbix Agent
+Restart_Zabbix() {
+    Log-Step "Restart Zabbix Agent"
+
+    sudo systemctl restart zabbix-agent || {
+        Log-Error "Failed to restart Zabbix Agent."
+        return 1
+    }
+    sudo systemctl enable zabbix-agent || Log-Warning "Failed to enable Zabbix Agent on boot."
+    sudo systemctl status zabbix-agent --no-pager || Log-Warning "Failed to retrieve Zabbix Agent status."
+
+    Log "Zabbix Agent restarted and enabled successfully."
+}
+
+# Full Setup for Zabbix Agent
+Setup_Zabbix_Agent() {
+    Install_Zabbix
+    Edit_Zabbix_Config
+    Restart_Zabbix
+}
