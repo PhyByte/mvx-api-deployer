@@ -97,6 +97,7 @@ Append_Bashrc() {
     if [ -f "/home/$USERNAME/mvx-api-deployer/configurationFiles/bashrc" ]; then
         Log "Appending custom bashrc configuration to /home/$USERNAME/.bashrc"
         cat /home/$USERNAME/mvx-api-deployer/configurationFiles/bashrc >>/home/$USERNAME/.bashrc
+        source /home/$USERNAME/.bashrc
     else
         Log-Warning "Custom bashrc file not found in /home/$USERNAME/mvx-api-deployer/configurationFiles/"
     fi

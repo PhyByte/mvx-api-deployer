@@ -56,3 +56,4 @@ MxApi_Check_Status
 Log-Title "All services installed successfully"
 Log "Proceed with the next step to start all the services by running:"
 Log "  ./3-Start.sh"
+
