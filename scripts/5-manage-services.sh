@@ -79,16 +79,17 @@ Check_All_Status() {
 ObsSquad_Start() {
    Log-Step "Start Observing Squad"
 
-   local script_dir="$HOME/mx-chain-scripts/scripts"
+   local script_path="$HOME/mx-chain-scripts/script.sh"
 
-   if [ -x "$script_dir" ]; then
-      "$script_dir start_all" || {
+   # Check if the script exists and is executable
+   if [ -x "$script_path" ]; then
+      "$script_path" start_all || {
          Log-Error "Failed to start Observing Squad. Check logs for details."
          return 1
       }
       Log "Observing Squad started successfully."
    else
-      Log-Error "Start script not found or not executable at $script_dir."
+      Log-Error "Start script not found or not executable at $script_path."
       return 1
    fi
 }
@@ -97,16 +98,17 @@ ObsSquad_Start() {
 ObsSquad_Stop() {
    Log-Step "Stop Observing Squad"
 
-   local script_dir="$HOME/mx-chain-scripts/scripts"
+   local script_path="$HOME/mx-chain-scripts/script.sh"
 
-   if [ -x "$script_dir" ]; then
-      "$script_dir stop_all" || {
+   # Check if the script exists and is executable
+   if [ -x "$script_path" ]; then
+      "$script_path" stop_all || {
          Log-Error "Failed to stop Observing Squad. Check logs for details."
          return 1
       }
       Log "Observing Squad stopped successfully."
    else
-      Log-Error "Stop script not found or not executable at $script_dir."
+      Log-Error "Stop script not found or not executable at $script_path."
       return 1
    fi
 }
