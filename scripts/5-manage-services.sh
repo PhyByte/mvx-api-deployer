@@ -35,12 +35,12 @@ Stop_All_Services() {
 Check_All_Status() {
    Log-Step "Check Status of All Services"
 
-   Log-SubStep "Checking Observing Squad Status"
-   if pgrep -f "start_all" &>/dev/null; then
-      Log "Observing Squad is running."
-   else
-      Log-Warning "Observing Squad is not running."
-   fi
+   Log-SubStep "Checking Observing Squad Status TODO:"
+   # if pgrep -f "start_all" &>/dev/null; then
+   #    Log "Observing Squad is running."
+   # else
+   #    Log-Warning "Observing Squad is not running."
+   # fi
 
    Log-SubStep "Checking ElasticSearch Indexer Status"
    if systemctl is-active --quiet elasticindexer; then
@@ -56,19 +56,19 @@ Check_All_Status() {
       Log-Warning "ElasticSearch and Kibana services are not running."
    fi
 
-   Log-SubStep "Checking MultiversX API Status"
-   local api_pid_file="$HOME/mx-api-service/mx-api.pid"
-   if [ -f "$api_pid_file" ]; then
-      local api_pid
-      api_pid=$(cat "$api_pid_file")
-      if ps -p "$api_pid" &>/dev/null; then
-         Log "MultiversX API is running (PID: $api_pid)."
-      else
-         Log-Warning "MultiversX API is not running, but PID file exists."
-      fi
-   else
-      Log-Warning "MultiversX API PID file not found. The service may not be running."
-   fi
+   Log-SubStep "Checking MultiversX API Status: TODO:"
+   # local api_pid_file="$HOME/mx-api-service/mx-api.pid"
+   # if [ -f "$api_pid_file" ]; then
+   #    local api_pid
+   #    api_pid=$(cat "$api_pid_file")
+   #    if ps -p "$api_pid" &>/dev/null; then
+   #       Log "MultiversX API is running (PID: $api_pid)."
+   #    else
+   #       Log-Warning "MultiversX API is not running, but PID file exists."
+   #    fi
+   # else
+   #    Log-Warning "MultiversX API PID file not found. The service may not be running."
+   # fi
 
    Log "Service status check completed."
 }
@@ -90,7 +90,7 @@ ObsSquad_Start() {
       }
       Log "Observing Squad started successfully."
    else
-      Log-Error "Script not found or not executable at $script_path."
+      Log-Error "Start script not found or not executable at $script_path."
       return 1
    fi
 }
@@ -101,6 +101,7 @@ ObsSquad_Stop() {
 
    local script_path="$HOME/mx-chain-scripts/script.sh"
 
+   # Check if the script exists and is executable
    if [ -x "$script_path" ]; then
       "$script_path" stop_all || {
          Log-Error "Failed to stop Observing Squad. Check logs for details."

@@ -38,6 +38,12 @@ Create_User
 Transfer_Repository
 
 # ---------------------------------------------------------
+# Setup Monitoring
+# ---------------------------------------------------------
+if [ "$INSTALL_ZABBIX_AGENT" = true ]; then
+    Setup_Zabbix_Agent
+fi
+# ---------------------------------------------------------
 # Switch to the New User
 # ---------------------------------------------------------
 sudo su - $USERNAME
