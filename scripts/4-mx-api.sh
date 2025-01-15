@@ -94,7 +94,7 @@ MxApi_Setup_Service() {
 
     # Create the systemd service file
     Log-SubStep "Create Systemd Service File"
-    sudo bash -c "cat <<EOF > $service_file
+    cat <<EOF | sudo tee "$service_file"
 [Unit]
 Description=MultiversX API Service
 After=network.target
@@ -108,7 +108,7 @@ Restart=on-failure
 
 [Install]
 WantedBy=multi-user.target
-EOF"
+EOF
 
     # Reload systemd and start the service
     Log-SubStep "Enable and Start the MultiversX API Service"

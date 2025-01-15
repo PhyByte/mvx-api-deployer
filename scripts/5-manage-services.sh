@@ -83,6 +83,7 @@ ObsSquad_Start() {
 
    # Check if the script exists and is executable
    if [ -x "$script_path" ]; then
+      # Run the script with the appropriate argument
       "$script_path" start_all || {
          Log-Error "Failed to start Observing Squad. Check logs for details."
          return 1
