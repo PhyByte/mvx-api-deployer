@@ -83,11 +83,31 @@ MxApi_Initialize() {
         Log-Error "Repository directory $repo_dir does not exist. Ensure the repository was cloned correctly."
         return 1
     fi
+    ## Run docker-compose up -d
+    Log-SubStep "Run docker-compose up -d"
+    docker-compose up -d
 }
 
 # Function to create and start the systemd service
 MxApi_Setup_Service() {
     Log-Step "Setup MultiversX API Systemd Service"
+
+    # Install NVM and Node.js 18
+    Log-SubStep "Install NVM and Set Node.js 18 as Default"
+    export NVM_DIR="$HOME/.nvm"
+    if [ ! -d "$NVM_DIR" ]; then
+        Log-SubStep "Installing NVM"
+        curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.5/install.sh | bash
+        export NVM_DIR="$HOME/.nvm"
+        [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
+    else
+        Log-SubStep "NVM is already installed"
+    fi
+
+    # Load NVM and install Node.js 18
+    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+    nvm install 18
+    nvm alias default 18
 
     local service_file="/etc/systemd/system/mvx-api.service"
     local repo_dir="$HOME/mx-api-service"
@@ -103,7 +123,7 @@ After=network.target
 Type=simple
 User=$USERNAME
 WorkingDirectory=$repo_dir
-ExecStart=/usr/bin/env bash -c 'source /home/mvx-api/.nvm/nvm.sh && npm run start:mainnet
+ExecStart=/usr/bin/env bash -c 'source /home/mvx-api/.nvm/nvm.sh && npm run start:mainnet'
 Restart=on-failure
 
 [Install]
