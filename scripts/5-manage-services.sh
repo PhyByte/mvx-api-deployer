@@ -120,7 +120,7 @@ ObsSquad_Stop() {
 EsIndexer_Start() {
    Log-Step "Start ElasticSearch Indexer"
 
-   local service_name="elasticindexer"
+   local service_name="mvx-elasticindexer"
 
    sudo systemctl start "$service_name" || {
       Log-Error "Failed to start ElasticSearch Indexer service. Check logs with 'journalctl -u $service_name'."
@@ -139,7 +139,7 @@ EsIndexer_Start() {
 EsIndexer_Stop() {
    Log-Step "Stop ElasticSearch Indexer"
 
-   local service_name="elasticindexer"
+   local service_name="mvx-elasticindexer"
 
    sudo systemctl stop "$service_name" || {
       Log-Error "Failed to stop ElasticSearch Indexer service."
@@ -211,7 +211,7 @@ EsKibana_Stop() {
 MxApi_Start() {
    Log-Step "Start MultiversX API Service"
 
-   local service_name="multiversx-api"
+   local service_name="mvx-api"
 
    Log-SubStep "Starting MultiversX API using systemctl"
    sudo systemctl start "$service_name" || {
@@ -231,7 +231,7 @@ MxApi_Start() {
 MxApi_Stop() {
    Log-Step "Stop MultiversX API Service"
 
-   local service_name="multiversx-api"
+   local service_name="mvx-api"
 
    Log-SubStep "Stopping MultiversX API using systemctl"
    sudo systemctl stop "$service_name" || {

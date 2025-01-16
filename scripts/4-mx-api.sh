@@ -89,7 +89,7 @@ MxApi_Initialize() {
 MxApi_Setup_Service() {
     Log-Step "Setup MultiversX API Systemd Service"
 
-    local service_file="/etc/systemd/system/multiversx-api.service"
+    local service_file="/etc/systemd/system/mvx-api.service"
     local repo_dir="$HOME/mx-api-service"
 
     # Create the systemd service file
@@ -103,7 +103,7 @@ After=network.target
 Type=simple
 User=$USERNAME
 WorkingDirectory=$repo_dir
-ExecStart=/usr/bin/npm run start:mainnet
+ExecStart=/usr/bin/env bash -c 'source /home/mvx-api/.nvm/nvm.sh && npm run start:mainnet
 Restart=on-failure
 
 [Install]

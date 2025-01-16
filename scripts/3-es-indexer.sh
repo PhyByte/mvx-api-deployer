@@ -81,7 +81,7 @@ EsIndexer_Create_Service() {
     Log-Step "Create and Enable Systemd Service for ElasticSearch Indexer"
 
     local cmd_dir="$HOME/mx-chain-es-indexer-go/cmd/elasticindexer"
-    local service_file="/etc/systemd/system/elasticindexer.service"
+    local service_file="/etc/systemd/system/mvx-elasticindexer.service"
 
     # Create the systemd service file
     if [ ! -f "$service_file" ]; then
