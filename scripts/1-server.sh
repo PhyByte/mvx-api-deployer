@@ -54,23 +54,30 @@ Install_Docker() {
 }
 
 # Create a new user with Docker access
+# Create a new user with Docker access and copy SSH keys
 Create_User() {
     Log-Step "Create a new user with Docker access"
+
     Log-SubStep "Create a new user"
-    # Create a new user with specified home directory and add to the sudo group
-    sudo useradd -s /bin/bash -d /home/$USERNAME -m -G sudo $USERNAME
+    sudo useradd -s /bin/bash -d /home/$USERNAME -m -G sudo $USERNAME || Log-Error "Failed to create the new user."
 
     Log-SubStep "Remove password requirement for the new user"
-    # Remove the password requirement for the new user
-    sudo passwd -d $USERNAME
+    sudo passwd -d $USERNAME || Log-Error "Failed to remove password requirement for the user."
 
     Log-SubStep "Grant passwordless sudo access to the new user"
-    # Configure sudoers to allow the new user to execute commands without a password
-    echo "$USERNAME ALL=(ALL) NOPASSWD:ALL" | sudo tee /etc/sudoers.d/$USERNAME
+    echo "$USERNAME ALL=(ALL) NOPASSWD:ALL" | sudo tee /etc/sudoers.d/$USERNAME || Log-Error "Failed to grant passwordless sudo access."
 
     Log-SubStep "Add the new user to the Docker group"
-    # Add the new user to the Docker group for Docker access
-    sudo usermod -aG docker $USERNAME
+    sudo usermod -aG docker $USERNAME || Log-Error "Failed to add the user to the Docker group."
+
+    Log-SubStep "Copy SSH keys to the new user"
+    sudo mkdir -p /home/$USERNAME/.ssh || Log-Error "Failed to create .ssh directory."
+    sudo cp /root/.ssh/authorized_keys /home/$USERNAME/.ssh/authorized_keys || Log-Error "Failed to copy SSH keys."
+    sudo chown -R $USERNAME:$USERNAME /home/$USERNAME/.ssh || Log-Error "Failed to set ownership of .ssh directory."
+    sudo chmod 700 /home/$USERNAME/.ssh || Log-Error "Failed to set permissions on .ssh directory."
+    sudo chmod 600 /home/$USERNAME/.ssh/authorized_keys || Log-Error "Failed to set permissions on authorized_keys."
+
+    Log "SSH keys copied to the new user successfully."
 }
 
 # Transfer the repository to the new user
@@ -102,6 +109,39 @@ Append_Bashrc() {
         Log-Warning "Custom bashrc file not found in /home/$USERNAME/mvx-api-deployer/configurationFiles/"
     fi
 }
+
+# Secure SSH configuration
+Secure_SSH() {
+    Log-Step "Securing SSH Configuration"
+
+    local ssh_config="/etc/ssh/sshd_config"
+
+    Log-SubStep "Changing SSH port to $SSH_PORT"
+    sudo sed -i "/^#\?Port/c\Port $SSH_PORT" $ssh_config || Log-Error "Failed to change SSH port."
+
+    Log-SubStep "Disabling password-based login"
+    sudo sed -i "/^#\?PasswordAuthentication/c\PasswordAuthentication no" $ssh_config || Log-Error "Failed to disable password authentication."
+
+    Log-SubStep "Disabling root login"
+    sudo sed -i "/^#\?PermitRootLogin/c\PermitRootLogin no" $ssh_config || Log-Error "Failed to disable root login."
+
+    Log-SubStep "Allowing only specific users"
+    echo "AllowUsers $USERNAME" | sudo tee -a $ssh_config >/dev/null || Log-Error "Failed to restrict users."
+
+    Log-SubStep "Restarting SSH service"
+    sudo systemctl restart ssh || Log-Error "Failed to restart SSH service."
+
+    Log "SSH configuration updated successfully."
+}
+
+# Disable Ubuntu login
+Disable_Ubuntu_Login() {
+    Log-Step "Disable Ubuntu User Login"
+
+    sudo passwd -l ubuntu || Log-Error "Failed to lock the ubuntu user account."
+    Log "Ubuntu user login disabled successfully."
+}
+
 
 # ---------------------------------------------------------
 # Zabbix Monitoring Installation and Management Functions
