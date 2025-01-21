@@ -12,6 +12,7 @@ source scripts/0-common.sh
 source scripts/1-server.sh
 source scripts/2-observing-squad.sh
 source scripts/3-es-indexer.sh
+source scripts/4-xexchange.sh
 source scripts/5-mx-api.sh
 
 # ---------------------------------------------------------
