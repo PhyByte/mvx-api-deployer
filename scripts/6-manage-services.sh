@@ -12,6 +12,7 @@ Start_All_Services() {
    ObsSquad_Start || Log-Warning "Observing Squad failed to start."
    EsIndexer_Start || Log-Warning "ElasticSearch Indexer failed to start."
    EsKibana_Start || Log-Warning "ElasticSearch and Kibana failed to start."
+   xExchange_Start || Log-Warning "MultiversX xExchange failed to start."
    MxApi_Start || Log-Warning "MultiversX API failed to start."
 
    Log "All services start commands executed. Verify individual service statuses."
@@ -25,6 +26,7 @@ Stop_All_Services() {
    MxApi_Stop || Log-Warning "MultiversX API failed to stop."
    EsKibana_Stop || Log-Warning "ElasticSearch and Kibana failed to stop."
    EsIndexer_Stop || Log-Warning "ElasticSearch Indexer failed to stop."
+   xExchange_Stop || Log-Warning "MultiversX xExchange failed to stop."
    ObsSquad_Stop || Log-Warning "Observing Squad failed to stop."
 
    Log "All services stop commands executed. Verify individual service statuses."
@@ -36,7 +38,6 @@ Check_All_Status() {
    Log-Step "Check Status of All Services"
 
    Log-SubStep "Checking Observing Squad Status TODO:"
-  
 
    Log-SubStep "Checking ElasticSearch Indexer Status"
    if systemctl is-active --quiet elasticindexer; then
@@ -45,9 +46,7 @@ Check_All_Status() {
       Log-Warning "ElasticSearch Indexer service is not running."
    fi
 
-
    Log-SubStep "Checking MultiversX API Status: TODO:"
-
 
    Log "Service status check completed."
 }
@@ -99,7 +98,7 @@ ObsSquad_Stop() {
 EsIndexer_Start() {
    Log-Step "Start ElasticSearch Indexer"
 
-   local service_name="mvx-elasticindexer"
+   local service_name="mvx-elasticindexer.service"
 
    sudo systemctl start "$service_name" || {
       Log-Error "Failed to start ElasticSearch Indexer service. Check logs with 'journalctl -u $service_name'."
@@ -118,7 +117,7 @@ EsIndexer_Start() {
 EsIndexer_Stop() {
    Log-Step "Stop ElasticSearch Indexer"
 
-   local service_name="mvx-elasticindexer"
+   local service_name="mvx-elasticindexer.service"
 
    sudo systemctl stop "$service_name" || {
       Log-Error "Failed to stop ElasticSearch Indexer service."
@@ -184,6 +183,35 @@ EsKibana_Stop() {
    Log "ElasticSearch and Kibana services stopped successfully."
 }
 
+# --------- MULTIVERSX xEXCHANGE FUNCTIONS ---------
+# Start the MultiversX xExchange
+xExchange_Start() {
+   Log-Step "Start MultiversX xExchange"
+
+   sudo systemctl start mvx-exchange.service || {
+      Log-Error "Failed to start MultiversX xExchange service. Check logs with 'journalctl -u mvx-exchange'."
+      return 1
+   }
+   Log "xExchange started successfully."
+}
+
+# Stop the MultiversX xExchange
+xExchange_Stop() {
+   Log-Step "Stop MultiversX xExchange"
+
+   sudo systemctl stop mvx-exchange.service || {
+      Log-Error "Failed to stop MultiversX xExchange service. Check logs with 'journalctl -u mvx-exchange'."
+      return 1
+   }
+
+   sudo systemctl status mvx-exchange.service --no-pager | grep "inactive (dead)" &>/dev/null
+   if [ $? -eq 0 ]; then
+      Log "xExchange stopped successfully."
+   else
+      Log-Error "xExchange is still running. Please check manually."
+      return 1
+   fi
+}
 # --------- MULTIVERSX API FUNCTIONS ---------
 
 # Start the MultiversX API

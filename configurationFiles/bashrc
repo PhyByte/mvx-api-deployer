@@ -59,6 +59,10 @@ api_indexer_stop() {
     EsIndexer_Stop
 }
 
+api_indexer_monitoring() {
+    journalctl -f -u mvx-elasticindexer.service
+}
+
 #------------------------------------------------------------
 #                ElasticSearch and Kibana Commands
 #------------------------------------------------------------
@@ -69,6 +73,21 @@ api_eskibana_start() {
 
 api_eskibana_stop() {
     EsKibana_Stop
+}
+
+#------------------------------------------------------------
+#                MultiversX Exchange Commands
+#------------------------------------------------------------
+api_mx_exchange_start() {
+    MxExchange_Start
+}
+
+api_mx_exchange_stop() {
+    MxExchange_Stop
+}
+
+api_mx_exchange_monitoring() {
+    journalctl -f -u mvx-exchange.service
 }
 
 #------------------------------------------------------------

@@ -16,6 +16,13 @@ xExchange_Prepare_Environment() {
     else
         Log-Warning "Repository already exists at $repo_dir. Skipping clone step."
     fi
+
+    # Install npm
+    Log-SubStep "Install npm"
+    sudo apt install -y npm || {
+        Log-Error "Failed to install npm."
+        return 1
+    }
 }
 
 xExchange_Copy_Configuration() {
