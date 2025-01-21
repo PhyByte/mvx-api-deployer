@@ -26,7 +26,7 @@ Log-Title "Install Observing Squad"
 
 ObsSquad_Prepare_Environment
 ObsSquad_Install
-ObsSquad_Activate_Indexer
+ObsSquad_Copy_Configuration
 
 # ---------------------------------------------------------
 #   Install ElasticSearch Indexer
@@ -34,7 +34,6 @@ ObsSquad_Activate_Indexer
 Log-Title "Install ElasticSearch Indexer"
 
 EsIndexer_Prepare_Environment
-EsIndexer_Install_Go
 EsIndexer_Build
 EsIndexer_Create_Service
 

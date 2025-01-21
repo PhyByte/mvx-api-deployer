@@ -56,32 +56,57 @@ ObsSquad_Install() {
         Log-Error "Observing Squad installation failed."
         return 1
     fi
+
+    # Link Go to the PATH
+    Log-SubStep "Link installed Go to the PATH"
+    echo 'export PATH=$PATH:/usr/local/go/bin' >> ~/.bashrc
+    export PATH=$PATH:/usr/local/go/bin
 }
 
-# Function that copy the external.toml file to the different node folders
-ObsSquad_Activate_Indexer() {
-    Log-Step "Activate Indexer Configuration for Nodes"
+# Function to copy the external.toml and prefs.toml files to the different node folders
+ObsSquad_Copy_Configuration() {
+    Log-Step "Overwrite node configurations into ~/elrond-nodes/node-[0,1,2,3]/config"
 
-    # Define base paths
-    local source_file="/home/$USERNAME/mvx-api-deployer/configurationFiles/external.toml"
-    local nodes_base_dir="$HOME/elrond-nodes"
+    # Define the source directory for configuration files
+    local config_source_dir="$HOME/mvx-api-deployer/configurationFiles/services/0-observingSquad/elrond-nodes"
 
-    # Ensure the source file exists
-    if [ ! -f "$source_file" ]; then
-        Log-Error "Source file $source_file does not exist."
+    # Verify if the source directory exists
+    if [ ! -d "$config_source_dir" ]; then
+        Log-Error "Source configuration directory $config_source_dir does not exist."
         return 1
     fi
 
-    Log-SubStep "Replace external.toml for each node."
-    for node in node-{0..3}; do
-        local target_dir="$nodes_base_dir/$node/config"
-        if [ -d "$target_dir" ]; then
-            cp "$source_file" "$target_dir/external.toml"
-            Log "Copied external.toml to $target_dir"
+    # Define the destination directory for node configurations
+    local node_base_dir="$HOME/elrond-nodes"
+
+    # Iterate through each node directory
+    for node_index in {0..3}; do
+        local node_dir="$node_base_dir/node-$node_index/config"
+        local external_file_source="$config_source_dir/node-$node_index/config/external.toml"
+        local prefs_file_source="$config_source_dir/node-$node_index/config/prefs.toml"
+
+        # Check if the node directory exists
+        if [ ! -d "$node_dir" ]; then
+            Log-Warning "Node directory $node_dir does not exist. Skipping."
+            continue
+        fi
+
+        # Overwrite external.toml
+        if [ -f "$external_file_source" ]; then
+            cp "$external_file_source" "$node_dir/"
+            Log-SubStep "Copied external.toml to $node_dir"
         else
-            Log-Warning "Target directory $target_dir does not exist. Skipping."
+            Log-Warning "external.toml not found for node-$node_index. Skipping."
+        fi
+
+        # Overwrite prefs.toml
+        if [ -f "$prefs_file_source" ]; then
+            cp "$prefs_file_source" "$node_dir/"
+            Log-SubStep "Copied prefs.toml to $node_dir"
+        else
+            Log-Warning "prefs.toml not found for node-$node_index. Skipping."
         fi
     done
 
-    Log "Indexer configuration activated successfully for available nodes."
+    Log "Node configurations successfully updated."
 }
