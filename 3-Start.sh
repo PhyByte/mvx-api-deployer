@@ -11,4 +11,5 @@ source scripts/6-manage-services.sh
 ObsSquad_Start
 EsIndexer_Start
 EsKibana_Start
-MxApi_Start
+xExchange_Start
+# MxApi_Start

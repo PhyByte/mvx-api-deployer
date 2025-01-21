@@ -254,3 +254,15 @@ MxApi_Stop() {
       return 1
    fi
 }
+
+# Function to check the status of the MultiversX API service
+MxApi_Check_Status() {
+    Log-Step "Check MultiversX API Service Status"
+
+    if systemctl is-active --quiet mvx-api.service; then
+        Log "MultiversX API service is running."
+    else
+        Log-Warning "MultiversX API service is not running."
+        sudo journalctl -u mvx-api.service --since "5 minutes ago"
+    fi
+}

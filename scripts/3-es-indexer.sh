@@ -18,7 +18,7 @@ EsIndexer_Prepare_Environment() {
             Log-Error "Failed to clone the ElasticSearch Indexer repository. Check your network connection."
             return 1
         }
-    Log "Repository cloned successfully."
+        Log "Repository cloned successfully."
     else
         Log-Warning "Repository already exists at $repo_dir. Skipping clone step."
     fi
@@ -31,7 +31,6 @@ EsIndexer_Copy_Configuration() {
     local source_dir="$HOME/mvx-api-deployer/configurationFiles/services/1-mx-chain-es-indexer-go"
     local repo_dir="$HOME/mx-chain-es-indexer-go"
 
-
     Log-SubStep "Copy docker compose file"
     cp -f "$source_dir/docker-compose.yml" "$repo_dir/docker-compose.yml" || {
         Log-Error "Failed to copy docker compose file."
@@ -39,8 +38,16 @@ EsIndexer_Copy_Configuration() {
     }
 
     Log-SubStep "Copy ElasticSearch Indexer service configuration files"
-    cp -f "$source_dir/cmd/elasticindexer/"*.toml "$repo_dir/cmd/elasticindexer/" || {
-        Log-Error "Failed to copy ElasticSearch Indexer configuration files."
+    cp -f "$source_dir/cmd/elasticindexer/api.toml" "$repo_dir/cmd/elasticindexer/config/api.toml" || {
+        Log-Error "Failed to copy ElasticSearch Indexer service configuration files."
+        return 1
+    }
+    cp -f "$source_dir/cmd/elasticindexer/config.toml" "$repo_dir/cmd/elasticindexer/config/config.toml" || {
+        Log-Error "Failed to copy ElasticSearch Indexer service configuration files."
+        return 1
+    }
+    cp -f "$source_dir/cmd/elasticindexer/prefs.toml" "$repo_dir/cmd/elasticindexer/config/prefs.toml" || {
+        Log-Error "Failed to copy ElasticSearch Indexer service configuration files."
         return 1
     }
     Log "ElasticSearch Indexer configuration files copied successfully."
