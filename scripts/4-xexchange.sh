@@ -78,6 +78,10 @@ xExchange_Build() {
         Log-Error "Failed to build xExchange."
         return 1
     }
+    sudo docker compose up -d || {
+        Log-Error "Failed to start xExchange services. Check Docker Compose logs for details."
+        return 1
+    }
 }
 
 xExchange_Create_Service() {
