@@ -21,7 +21,7 @@ xExchange_Prepare_Environment() {
     fi
 }
 
-xExchange_Overwrite_Sll_configuration {
+xExchange_Overwrite_Sll_configuration() {
     Log-Step "Overwrite SSL configuration file"
 
     local repo_dir="$HOME/mx-exchange-service"

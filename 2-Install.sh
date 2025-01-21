@@ -29,6 +29,7 @@ ObsSquad_Copy_Configuration
 Log-Title "Install MultiversX Elastic Indexer"
 
 EsIndexer_Prepare_Environment
+EsIndexer_Copy_Configuration
 EsIndexer_Build
 EsIndexer_Create_Service
 

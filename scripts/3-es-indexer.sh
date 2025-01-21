@@ -25,7 +25,7 @@ EsIndexer_Prepare_Environment() {
 
 }
 
-EsIndexer_Copy_Configuration {
+EsIndexer_Copy_Configuration() {
     Log-Step "Copy ElasticSearch Indexer Configuration"
 
     local source_dir="$HOME/mvx-api-deployer/configurationFiles/services/1-mx-chain-es-indexer-go"
