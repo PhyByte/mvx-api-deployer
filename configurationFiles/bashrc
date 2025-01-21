@@ -5,7 +5,7 @@
 # Import necessary scripts
 source $HOME/mvx-api-deployer/config.cfg
 source $HOME/mvx-api-deployer/scripts/0-common.sh
-source $HOME/mvx-api-deployer/scripts/5-manage-services.sh
+source $HOME/mvx-api-deployer/scripts/6-manage-services.sh
 
 #------------------------------------------------------------
 #                Service Status Commands
