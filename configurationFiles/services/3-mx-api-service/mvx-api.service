@@ -6,7 +6,7 @@ After=network.target
 Type=simple
 User=ubuntu
 WorkingDirectory=/home/ubuntu/mx-api-service
-ExecStart=npm run start:devnet'
+ExecStart=npm run start:devnet
 Restart=on-failure
 
 [Install]

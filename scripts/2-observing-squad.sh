@@ -3,112 +3,110 @@
 # Official Link: https://docs.multiversx.com/integrators/observing-squad
 # ---------------------------------------------------------
 
-# --------- PATH DECLARATIONS ---------
-REPO_DIR="$HOME/mx-chain-scripts"
-CONFIG_FILE="$REPO_DIR/config/variables.cfg"
-SCRIPT_FILE="$REPO_DIR/script.sh"
-CONFIG_SOURCE_DIR="$HOME/mvx-api-deployer/configurationFiles/services/0-observingSquad/elrond-nodes"
-NODE_BASE_DIR="$HOME/elrond-nodes"
-
-# --------- FUNCTIONS ---------
-
 # Prepare the Observing Squad Environment
 ObsSquad_Prepare_Environment() {
-    Log-Step "Preparing the Observing Squad environment"
+    Log-Step "Prepare Observing Squad Environment"
 
-    # Clone the repository if not already present
-    if [ ! -d "$REPO_DIR" ]; then
-        Log-SubStep "Cloning the MultiversX chain scripts repository"
-        git clone https://github.com/multiversx/mx-chain-scripts.git "$REPO_DIR"
-        Log "Repository cloned successfully into $REPO_DIR"
+    local repo_dir="$HOME/mx-chain-scripts"
+    local config_file="$repo_dir/config/variables.cfg"
+
+    if [ ! -d "$repo_dir" ]; then
+        Log-SubStep "Clone the MultiversX chain scripts repository"
+        git clone https://github.com/multiversx/mx-chain-scripts.git "$repo_dir"
     else
-        Log "Repository already exists in $REPO_DIR. Skipping cloning step."
+        Log "Repository already cloned. Skipping clone step."
     fi
 
-    # Replace variables in the configuration file
-    Log-SubStep "Updating configuration variables in $CONFIG_FILE"
-    if [ ! -f "$CONFIG_FILE" ]; then
-        Log-Error "Configuration file $CONFIG_FILE not found. Unable to proceed."
+    Log-SubStep "Replace variables in the configuration file (variables.cfg)."
+    if [ ! -f "$config_file" ]; then
+        Log-Error "Configuration file $config_file not found. Exiting."
         return 1
     fi
 
-    sed -i "s/^ENVIRONMENT=\".*\"/ENVIRONMENT=\"$NETWORK\"/" "$CONFIG_FILE"
-    sed -i "s|^CUSTOM_HOME=.*|CUSTOM_HOME=\"$HOME\"|" "$CONFIG_FILE"
-    sed -i "s/^CUSTOM_USER=.*$/CUSTOM_USER=\"$USERNAME\"/" "$CONFIG_FILE"
-    Log "Configuration variables updated successfully."
+    sed -i "s/^ENVIRONMENT=\".*\"/ENVIRONMENT=\"$NETWORK\"/" "$config_file"
+    sed -i "s|^CUSTOM_HOME=.*|CUSTOM_HOME=\"$HOME\"|" "$config_file"
+    sed -i "s/^CUSTOM_USER=.*$/CUSTOM_USER=\"$USERNAME\"/" "$config_file"
+
 }
 
-# Install the Observing Squad and approve all prompts automatically
+# Function that install the observing squad and press enter to all the questions
 ObsSquad_Install() {
-    Log-Step "Installing the Observing Squad"
+    Log-Step "Install Observing Squad"
 
-    # Ensure the script directory exists
-    if [ ! -d "$REPO_DIR" ]; then
-        Log-Error "Directory $REPO_DIR does not exist. Please prepare the environment first."
+    local script_dir="$HOME/mx-chain-scripts"
+    local script_file="$script_dir/script.sh"
+
+    # Verify the directory exists
+    if [ ! -d "$script_dir" ]; then
+        Log-Error "Directory $script_dir does not exist. Clone the repository first."
         return 1
     fi
 
-    # Ensure the script file exists
-    if [ ! -f "$SCRIPT_FILE" ]; then
-        Log-Error "Script file $SCRIPT_FILE not found in $REPO_DIR."
+    # Verify the script file exists
+    if [ ! -f "$script_file" ]; then
+        Log-Error "Script file $script_file does not exist."
         return 1
     fi
 
-    # Run the script and approve all prompts
-    Log-SubStep "Running the Observing Squad installation script"
-    yes "" | "$SCRIPT_FILE" observing_squad
+    # Run the script and automatically approve prompts
+    yes "" | "$script_file" observing_squad
     if [ $? -eq 0 ]; then
         Log "Observing Squad installation completed successfully."
     else
-        Log-Error "Observing Squad installation encountered errors."
+        Log-Error "Observing Squad installation failed."
         return 1
     fi
 
     # Link Go to the PATH
-    Log-SubStep "Adding Go binary to PATH"
+    Log-SubStep "Link installed Go to the PATH"
     echo 'export PATH=$PATH:/usr/local/go/bin' >>~/.bashrc
     export PATH=$PATH:/usr/local/go/bin
-    Log "Go binary successfully linked to PATH."
 }
 
-# Copy the external.toml and prefs.toml files to the appropriate node directories
+# Function to copy the external.toml and prefs.toml files to the different node folders
 ObsSquad_Copy_Configuration() {
-    Log-Step "Updating node configurations in $NODE_BASE_DIR"
+    Log-Step "Overwrite node configurations into ~/elrond-nodes/node-[0,1,2,3]/config"
+
+    # Define the source directory for configuration files
+    local config_source_dir="$HOME/mvx-api-deployer/configurationFiles/services/0-observingSquad/elrond-nodes"
 
     # Verify if the source directory exists
-    if [ ! -d "$CONFIG_SOURCE_DIR" ]; then
-        Log-Error "Source directory for configurations not found: $CONFIG_SOURCE_DIR"
+    if [ ! -d "$config_source_dir" ]; then
+        Log-Error "Source configuration directory $config_source_dir does not exist."
         return 1
     fi
 
+    # Define the destination directory for node configurations
+    local node_base_dir="$HOME/elrond-nodes"
+
     # Iterate through each node directory
     for node_index in {0..3}; do
-        local node_dir="$NODE_BASE_DIR/node-$node_index/config"
-        local external_file_source="$CONFIG_SOURCE_DIR/node-$node_index/external.toml"
-        local prefs_file_source="$CONFIG_SOURCE_DIR/node-$node_index/prefs.toml"
+        local node_dir="$node_base_dir/node-$node_index/config"
+        local external_file_source="$config_source_dir/node-$node_index/external.toml"
+        local prefs_file_source="$config_source_dir/node-$node_index/prefs.toml"
 
         # Check if the node directory exists
         if [ ! -d "$node_dir" ]; then
-            Log-Warning "Node directory not found: $node_dir. Skipping node-$node_index."
+            Log-Warning "Node directory $node_dir does not exist. Skipping."
             continue
         fi
 
         # Overwrite external.toml
         if [ -f "$external_file_source" ]; then
             cp "$external_file_source" "$node_dir/"
-            Log-SubStep "external.toml copied to $node_dir"
+            Log-SubStep "Copied external.toml to $node_dir"
         else
-            Log-Warning "external.toml missing for node-$node_index in $CONFIG_SOURCE_DIR. Skipping."
+            Log-Warning "external.toml not found for node-$node_index. Skipping."
         fi
 
         # Overwrite prefs.toml
         if [ -f "$prefs_file_source" ]; then
             cp "$prefs_file_source" "$node_dir/"
-            Log-SubStep "prefs.toml copied to $node_dir"
+            Log-SubStep "Copied prefs.toml to $node_dir"
         else
-            Log-Warning "prefs.toml missing for node-$node_index in $CONFIG_SOURCE_DIR. Skipping."
+            Log-Warning "prefs.toml not found for node-$node_index. Skipping."
         fi
     done
 
-    Log "Node configurations updated for all available nodes."
+    Log "Node configurations successfully updated."
 }
