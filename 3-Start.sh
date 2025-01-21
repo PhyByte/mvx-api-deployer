@@ -12,4 +12,4 @@ ObsSquad_Start
 EsIndexer_Start
 EsKibana_Start
 xExchange_Start
-# MxApi_Start
+MxApi_Start
