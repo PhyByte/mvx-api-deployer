@@ -82,8 +82,8 @@ ObsSquad_Copy_Configuration() {
     # Iterate through each node directory
     for node_index in {0..3}; do
         local node_dir="$node_base_dir/node-$node_index/config"
-        local external_file_source="$config_source_dir/node-$node_index/config/external.toml"
-        local prefs_file_source="$config_source_dir/node-$node_index/config/prefs.toml"
+        local external_file_source="$config_source_dir/node-$node_index/external.toml"
+        local prefs_file_source="$config_source_dir/node-$node_index/prefs.toml"
 
         # Check if the node directory exists
         if [ ! -d "$node_dir" ]; then
