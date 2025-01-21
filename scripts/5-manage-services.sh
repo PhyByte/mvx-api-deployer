@@ -152,7 +152,7 @@ EsKibana_Start() {
       return 1
    }
 
-   docker-compose up -d || {
+   sudo docker compose up -d || {
       Log-Error "Failed to start ElasticSearch and Kibana services. Check Docker Compose logs for details."
       return 1
    }
@@ -176,7 +176,7 @@ EsKibana_Stop() {
       return 1
    }
 
-   docker-compose down || {
+   sudo docker compose down || {
       Log-Error "Failed to stop ElasticSearch and Kibana services. Check Docker Compose logs for details."
       return 1
    }

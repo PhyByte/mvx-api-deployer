@@ -63,7 +63,7 @@ EsIndexer_Create_Service() {
     local service_file="/etc/systemd/system/mvx-elasticindexer.service"
 
     Log-SubStep "Copy ElasticSearch Indexer Service File"
-    sudo cp "$HOME/mvx-api-deployer/services/1-mx-chain-es-indexer-go/mvx-elasticindexer.service" "$service_file" || {
+    sudo cp "$HOME/mvx-api-deployer/configurationFiles/services/1-mx-chain-es-indexer-go/mvx-elasticindexer.service" "$service_file" || {
         Log-Error "Failed to copy ElasticSearch Indexer service file."
         return 1
     }
@@ -74,10 +74,10 @@ EsIndexer_Create_Service() {
         Log-Error "Failed to enable ElasticSearch Indexer service."
         return 1
     }
-    sudo systemctl start mvx-elasticindexer || {
-        Log-Error "Failed to start ElasticSearch Indexer service."
-        return 1
-    }
+    # sudo systemctl start mvx-elasticindexer || {
+    #     Log-Error "Failed to start ElasticSearch Indexer service."
+    #     return 1
+    # }
 
     # Verify the service is running
     sudo systemctl status mvx-elasticindexer --no-pager || {

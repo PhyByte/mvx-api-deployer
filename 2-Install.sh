@@ -15,11 +15,6 @@ source scripts/3-es-indexer.sh
 source scripts/4-mx-api.sh
 
 # ---------------------------------------------------------
-#   Setup the Environment
-# ---------------------------------------------------------
-Append_Bashrc
-
-# ---------------------------------------------------------
 #   Install Observing Squad
 # ---------------------------------------------------------
 Log-Title "Install Observing Squad"
@@ -29,9 +24,9 @@ ObsSquad_Install
 ObsSquad_Copy_Configuration
 
 # ---------------------------------------------------------
-#   Install ElasticSearch Indexer
+#   Install MultiversX ElasticSearch Indexer
 # ---------------------------------------------------------
-Log-Title "Install ElasticSearch Indexer"
+Log-Title "Install MultiversX Elastic Indexer"
 
 EsIndexer_Prepare_Environment
 EsIndexer_Build
