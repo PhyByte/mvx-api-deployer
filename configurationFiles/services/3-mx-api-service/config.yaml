@@ -1,5 +1,5 @@
 # Overwritted by mvx-api-deployer
-network: 'devnet'
+network: "devnet"
 metaChainShardId: 4294967295
 api:
   public: true
@@ -24,9 +24,9 @@ features:
   eventsNotifier:
     enabled: false
     port: 5674
-    url: 'amqp://guest:guest@127.0.0.1:5673'
-    exchange: 'all_events'
-    queue: 'api-process-logs-and-events'
+    url: "amqp://guest:guest@127.0.0.1:5673"
+    exchange: "all_events"
+    queue: "api-process-logs-and-events"
   guestCaching:
     enabled: false
     hitsThreshold: 100
@@ -35,7 +35,7 @@ features:
     enabled: false
   transactionPoolWarmer:
     enabled: false
-    cronExpression: '*/5 * * * * *'
+    cronExpression: "*/5 * * * * *"
     ttlInSeconds: 60
   updateCollectionExtraDetails:
     enabled: false
@@ -43,27 +43,27 @@ features:
     enabled: false
   marketplace:
     enabled: false
-    serviceUrl: 'https://devnet-nfts-graph.multiversx.com/graphql'
+    serviceUrl: "https://devnet-nfts-graph.multiversx.com/graphql"
   exchange:
     enabled: true
-    serviceUrl: 'http://localhost:3005/graphql'
+    serviceUrl: "http://localhost:3005/graphql"
   dataApi:
     enabled: false
-    serviceUrl: 'https://devnet-data-api.multiversx.com'
+    serviceUrl: "https://devnet-data-api.multiversx.com"
   assetsFetch:
     enabled: true
-    assetesUrl: 'https://tools.multiversx.com/assets-cdn'
+    assetesUrl: "https://tools.multiversx.com/assets-cdn"
   auth:
     enabled: false
     maxExpirySeconds: 86400
     acceptedOrigins:
-      - ''
+      - ""
     admins:
-      - ''
-    jwtSecret: ''
+      - ""
+    jwtSecret: ""
   stakingV4:
     enabled: false
-    cronExpression: '*/5 * * * * *'
+    cronExpression: "*/5 * * * * *"
     activationEpoch: 1043
   nodeEpochsLeft:
     enabled: false
@@ -73,7 +73,7 @@ features:
   transactionCompleted:
     enabled: false
     maxLookBehind: 100
-    logLevel: 'Error'
+    logLevel: "Error"
   transactionBatch:
     enabled: true
     maxLookBehind: 100
@@ -92,58 +92,58 @@ features:
     enabled: false
   processNfts:
     enabled: false
-    nftQueueName: 'api-process-nfts'
-    deadLetterQueueName: 'api-process-nfts-dlq'
+    nftQueueName: "api-process-nfts"
+    deadLetterQueueName: "api-process-nfts-dlq"
   tps:
     enabled: false
     maxLookBehindNonces: 100
   nodesFetch:
     enabled: true
-    serviceUrl: 'https://devnet-api.multiversx.com'
+    serviceUrl: "https://devnet-api.multiversx.com"
   tokensFetch:
     enabled: true
-    serviceUrl: 'https://devnet-api.multiversx.com'
+    serviceUrl: "https://devnet-api.multiversx.com"
   providersFetch:
     enabled: true
-    serviceUrl: 'https://devnet-api.multiversx.com'
+    serviceUrl: "https://devnet-api.multiversx.com"
 image:
   width: 600
   height: 600
-  type: 'png'
+  type: "png"
 aws:
-  s3KeyId: ''
-  s3Secret: ''
-  s3Bucket: 'devnet-media.elrond.com'
-  s3Region: ''
+  s3KeyId: ""
+  s3Secret: ""
+  s3Bucket: "devnet-media.elrond.com"
+  s3Region: ""
 urls:
-  self: 'https://devnet-api.multiversx.com'
+  self: "https://devnet-api.multiversx.com"
   elastic:
-    - 'http://localhost:9200'
+    - "http://localhost:9200"
   gateway:
-    - 'http://localhost:8079'
-  verifier: 'https://play-api.multiversx.com'
-  redis: '127.0.0.1'
-  rabbitmq: 'amqp://127.0.0.1:5672'
-  providers: 'https://devnet-delegation-api.multiversx.com/providers'
-  delegation: 'https://devnet-delegation-api.multiversx.com'
-  media: 'https://devnet-media.elrond.com'
-  nftThumbnails: 'https://devnet-media.elrond.com/nfts/thumbnail'
-  tmp: '/tmp'
-  ipfs: 'https://ipfs.io/ipfs'
-  socket: 'devnet-socket-api.multiversx.com'
-  maiarId: 'https://devnet-id-api.multiversx.com'
+    - "http://localhost:8079"
+  verifier: "https://play-api.multiversx.com"
+  redis: "127.0.0.1"
+  rabbitmq: "amqp://127.0.0.1:5672"
+  providers: "https://devnet-delegation-api.multiversx.com/providers"
+  delegation: "https://devnet-delegation-api.multiversx.com"
+  media: "https://devnet-media.elrond.com"
+  nftThumbnails: "https://devnet-media.elrond.com/nfts/thumbnail"
+  tmp: "/tmp"
+  ipfs: "https://ipfs.io/ipfs"
+  socket: "devnet-socket-api.multiversx.com"
+  maiarId: "https://devnet-id-api.multiversx.com"
 indexer:
-  type: 'elastic'
+  type: "elastic"
   maxPagination: 10000
 database:
   enabled: false
-  url: 'mongodb://127.0.0.1:27017/api?authSource=admin'
-  type: 'mysql'
-  host: 'localhost'
+  url: "mongodb://127.0.0.1:27017/api?authSource=admin"
+  type: "mysql"
+  host: "localhost"
   port: 3306
-  username: 'root'
-  password: 'root'
-  database: 'api'
+  username: "root"
+  password: "root"
+  database: "api"
 caching:
   cacheTtl: 6
   processTtl: 600
@@ -153,12 +153,12 @@ keepAliveTimeout:
   downstream: 61000
   upstream: 60000
 contracts:
-  esdt: 'erd1qqqqqqqqqqqqqqqpqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqzllls8a5w6u'
-  auction: 'erd1qqqqqqqqqqqqqqqpqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqplllst77y4l'
-  staking: 'erd1qqqqqqqqqqqqqqqpqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqllls0lczs7'
-  delegationManager: 'erd1qqqqqqqqqqqqqqqpqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqylllslmq6y6'
-  delegation: 'erd1qqqqqqqqqqqqqpgq97wezxw6l7lgg7k9rxvycrz66vn92ksh2tssxwf7ep'
-  metabonding: 'erd1qqqqqqqqqqqqqpgqkg7we73j769ew5we4yyx7uyvnn0nefqgd8ssm6vjc2'
+  esdt: "erd1qqqqqqqqqqqqqqqpqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqzllls8a5w6u"
+  auction: "erd1qqqqqqqqqqqqqqqpqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqplllst77y4l"
+  staking: "erd1qqqqqqqqqqqqqqqpqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqllls0lczs7"
+  delegationManager: "erd1qqqqqqqqqqqqqqqpqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqylllslmq6y6"
+  delegation: "erd1qqqqqqqqqqqqqpgq97wezxw6l7lgg7k9rxvycrz66vn92ksh2tssxwf7ep"
+  metabonding: "erd1qqqqqqqqqqqqqpgqkg7we73j769ew5we4yyx7uyvnn0nefqgd8ssm6vjc2"
 inflation:
   - 1952123
   - 1746637

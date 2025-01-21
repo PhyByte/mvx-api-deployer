@@ -1,5 +1,4 @@
 # Overwritted by mvx-api-deployer
-version: '3.4'
 services:
   redis:
     image: "redis:alpine"
@@ -44,8 +43,8 @@ services:
     environment:
       HOSTNAME: notifier
       RABBITMQ_NODENAME: rabbitmq
-      RABBITMQ_DEFAULT_USER: 'guest'
-      RABBITMQ_DEFAULT_PASS: 'guest'
+      RABBITMQ_DEFAULT_USER: "guest"
+      RABBITMQ_DEFAULT_PASS: "guest"
     volumes:
       - /var/lib/notifier
     ports:

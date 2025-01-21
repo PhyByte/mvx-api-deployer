@@ -33,6 +33,15 @@ EsIndexer_Copy_Configuration
 EsIndexer_Build
 EsIndexer_Create_Service
 
+
+# ---------------------------------------------------------
+#   Install xExchange Service
+# ---------------------------------------------------------
+xExchange_Prepare_Environment
+xExchange_Copy_Configuration
+xExchange_Overwrite_Sll_configuration
+xExchange_Build
+xExchange_Create_Service
 # ---------------------------------------------------------
 #   Install MultiversX API
 # ---------------------------------------------------------

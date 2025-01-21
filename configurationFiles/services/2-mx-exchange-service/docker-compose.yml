@@ -1,43 +1,41 @@
 # Overwritted by mvx-api-deployer
-version: '3.1'
-
 services:
-    redis:
-        image: redis
-        container_name: redis
-        command: redis-server
-        ports:
-            - '6380:6379'
-        expose:
-            - '6379'
-    rabbitmq:
-        image: 331leo/rabbitmq3-management-mqtt
-        hostname: rabbitmq
-        environment:
-            HOSTNAME: rabbitmq
-            RABBITMQ_NODENAME: rabbitmq
-            RABBITMQ_DEFAULT_USER: 'guest'
-            RABBITMQ_DEFAULT_PASS: 'guest'
-        volumes:
-            - /var/lib/rabbitmq
-        ports:
-            - '5674:5672'
-            - '15674:15672'
-    mongodb:
-        image: mongo:latest
-        environment:
-            - MONGODB_DATABASE=development
-            - MONGO_INITDB_ROOT_USERNAME=admin
-            - MONGO_INITDB_ROOT_PASSWORD=admin
-        ports:
-            - '27018:27017'
-    timescaledb:
-        image: timescale/timescaledb-ha:pg14-latest
-        container_name: timescaledb_instance
-        ports:
-            - '5432:5432'
-        environment:
-            POSTGRES_PASSWORD: postgres
-            POSTGRES_USER: postgres
-            TIMESCALEDB_TELEMETRY: off
-            PGDATA: /var/lib/postgresql/data/pgdata
+  redis:
+    image: redis
+    container_name: redis
+    command: redis-server
+    ports:
+      - "6380:6379"
+    expose:
+      - "6379"
+  rabbitmq:
+    image: 331leo/rabbitmq3-management-mqtt
+    hostname: rabbitmq
+    environment:
+      HOSTNAME: rabbitmq
+      RABBITMQ_NODENAME: rabbitmq
+      RABBITMQ_DEFAULT_USER: "guest"
+      RABBITMQ_DEFAULT_PASS: "guest"
+    volumes:
+      - /var/lib/rabbitmq
+    ports:
+      - "5674:5672"
+      - "15674:15672"
+  mongodb:
+    image: mongo:latest
+    environment:
+      - MONGODB_DATABASE=development
+      - MONGO_INITDB_ROOT_USERNAME=admin
+      - MONGO_INITDB_ROOT_PASSWORD=admin
+    ports:
+      - "27018:27017"
+  timescaledb:
+    image: timescale/timescaledb-ha:pg14-latest
+    container_name: timescaledb_instance
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_USER: postgres
+      TIMESCALEDB_TELEMETRY: off
+      PGDATA: /var/lib/postgresql/data/pgdata
