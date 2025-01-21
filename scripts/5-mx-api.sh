@@ -24,20 +24,20 @@ MxApi_Prepare_Environment() {
 }
 
 # Function to install npm if not already installed
-MxApi_Install_Npm() {
-    Log-Step "Install Npm"
+# MxApi_Install_Npm() {
+#     Log-Step "Install Npm"
 
-    if ! command -v npm &>/dev/null; then
-        Log-SubStep "Install Npm Package Manager"
-        sudo apt update && sudo apt install npm -y || {
-            Log-Error "Npm installation failed. Please check your network or package manager settings."
-            return 1
-        }
-        Log "Npm installed successfully."
-    else
-        Log "Npm is already installed. Skipping installation."
-    fi
-}
+#     if ! command -v npm &>/dev/null; then
+#         Log-SubStep "Install Npm Package Manager"
+#         sudo apt update && sudo apt install npm -y || {
+#             Log-Error "Npm installation failed. Please check your network or package manager settings."
+#             return 1
+#         }
+#         Log "Npm installed successfully."
+#     else
+#         Log "Npm is already installed. Skipping installation."
+#     fi
+# }
 
 # Function to install dependencies for the MultiversX API
 MxApi_Install_Dependencies() {
@@ -85,71 +85,45 @@ MxApi_Initialize() {
     fi
     ## Run docker-compose up -d
     Log-SubStep "Run docker-compose up -d"
-    docker-compose up -d
+    sudo docker compose up -d
 }
 
-# Function to create and start the systemd service
-MxApi_Setup_Service() {
-    Log-Step "Setup MultiversX API Systemd Service"
+MxApi_Copy_Configuration() {
+    Log-Step "Copy MultiversX API Configuration"
 
-    # Install NVM and Node.js 18
-    Log-SubStep "Install NVM and Set Node.js 18 as Default"
-    export NVM_DIR="$HOME/.nvm"
-    if [ ! -d "$NVM_DIR" ]; then
-        Log-SubStep "Installing NVM"
-        curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.5/install.sh | bash
-        export NVM_DIR="$HOME/.nvm"
-        [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
-    else
-        Log-SubStep "NVM is already installed"
-    fi
-
-    # Load NVM and install Node.js 18
-    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-    nvm install 18
-    nvm alias default 18
-
-    local service_file="/etc/systemd/system/mvx-api.service"
+    local source_dir="$HOME/mvx-api-deployer/configurationFiles/services/3-mx-api-service"
     local repo_dir="$HOME/mx-api-service"
 
-    # Create the systemd service file
-    Log-SubStep "Create Systemd Service File"
-    cat <<EOF | sudo tee "$service_file"
-[Unit]
-Description=MultiversX API Service
-After=network.target
-
-[Service]
-Type=simple
-User=$USERNAME
-WorkingDirectory=$repo_dir
-ExecStart=/usr/bin/env bash -c 'source /home/mvx-api/.nvm/nvm.sh && npm run start:mainnet'
-Restart=on-failure
-
-[Install]
-WantedBy=multi-user.target
-EOF
-
-    # Reload systemd and start the service
-    Log-SubStep "Enable and Start the MultiversX API Service"
-    sudo systemctl daemon-reload
-    sudo systemctl enable mvx-api.service
-    sudo systemctl start mvx-api.service || {
-        Log-Error "Failed to start the MultiversX API service."
+    Log-SubStep "Copy docker-compose.yml file"
+    cp -f "$source_dir/docker-compose.yml" "$repo_dir/docker-compose.yml" || {
+        Log-Error "Failed to copy docker-compose.yml file."
         return 1
     }
 
-    Log "MultiversX API service setup completed successfully."
+    Log-SubStep "Copy config.yaml file"
+    cp -f "$source_dir/config.yaml" "$repo_dir/config/config.yaml" || {
+        Log-Error "Failed to copy config.yaml file."
+        return 1
+    }
+
+    Log "MultiversX API configuration files copied successfully."
 }
 
-# Function to check the status of the MultiversX API service
-MxApi_Check_Status() {
-    Log-Step "Check MultiversX API Service Status"
+MxApi_Create_Service() {
+    Log-Step "Create MultiversX API Service"
 
-    if systemctl is-active --quiet mvx-api.service; then
-        Log "MultiversX API service is running."
-    else
-        Log-Warning "MultiversX API service is not running."
-        sudo journalctl -u mvx-api.service --since "5 minutes ago"
-    fi
+    local service_file="/etc/systemd/system/mvx-api.service"
+
+    Log-SubStep "Copy MultiversX API service file"
+    sudo cp "$HOME/mvx-api-deployer/configurationFiles/services/3-mx-api-service/mvx-api.service" "$service_file" || {
+        Log-Error "Failed to copy MultiversX API service file."
+        return 1
+    }
+
+    Log-SubStep "Enable MultiversX API service"
+    sudo systemctl daemon-reload
+    sudo systemctl enable mvx-api.service || {
+        Log-Error "Failed to enable MultiversX API service."
+        return 1
+    }
 }

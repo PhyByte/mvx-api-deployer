@@ -1,4 +1,3 @@
-
 # ---------------------------------------------------------
 # ElasticSearch Indexer Installation Functions
 # Official Link: https://docs.multiversx.com/sdk-and-tools/indexer/#observer-client
@@ -19,26 +18,39 @@ EsIndexer_Prepare_Environment() {
             Log-Error "Failed to clone the ElasticSearch Indexer repository. Check your network connection."
             return 1
         }
+        Log "Repository cloned successfully."
     else
         Log-Warning "Repository already exists at $repo_dir. Skipping clone step."
     fi
+
 }
 
-# Install Go and verify the environment
-EsIndexer_Install_Go() {
-    Log-Step "Install Go Language for ElasticSearch Indexer"
+EsIndexer_Copy_Configuration() {
+    Log-Step "Copy ElasticSearch Indexer Configuration"
 
-    # Install Go if it's not already installed
-    if ! command -v go &>/dev/null; then
-        Log-SubStep "Install Go Language"
-        Log "Installing Go language..."
-        sudo apt update && sudo apt install golang-go -y || {
-            Log-Error "Go installation failed. Please check your setup."
-            return 1
-        }
-    else
-        Log "Go is already installed. Skipping installation."
-    fi
+    local source_dir="$HOME/mvx-api-deployer/configurationFiles/services/1-mx-chain-es-indexer-go"
+    local repo_dir="$HOME/mx-chain-es-indexer-go"
+
+    Log-SubStep "Copy docker compose file"
+    cp -f "$source_dir/docker-compose.yml" "$repo_dir/docker-compose.yml" || {
+        Log-Error "Failed to copy docker compose file."
+        return 1
+    }
+
+    Log-SubStep "Copy ElasticSearch Indexer service configuration files"
+    cp -f "$source_dir/cmd/elasticindexer/api.toml" "$repo_dir/cmd/elasticindexer/config/api.toml" || {
+        Log-Error "Failed to copy ElasticSearch Indexer service configuration files."
+        return 1
+    }
+    cp -f "$source_dir/cmd/elasticindexer/config.toml" "$repo_dir/cmd/elasticindexer/config/config.toml" || {
+        Log-Error "Failed to copy ElasticSearch Indexer service configuration files."
+        return 1
+    }
+    cp -f "$source_dir/cmd/elasticindexer/prefs.toml" "$repo_dir/cmd/elasticindexer/config/prefs.toml" || {
+        Log-Error "Failed to copy ElasticSearch Indexer service configuration files."
+        return 1
+    }
+    Log "ElasticSearch Indexer configuration files copied successfully."
 }
 
 # Build and configure the ElasticSearch Indexer
@@ -48,6 +60,8 @@ EsIndexer_Build() {
     local repo_dir="$HOME/mx-chain-es-indexer-go"
     local cmd_dir="$repo_dir/cmd/elasticindexer"
 
+    Log "Pull the docker images"
+    cd "$repo_dir" && sudo docker compose pull
     # Verify the command directory exists
     if [ ! -d "$cmd_dir" ]; then
         Log-Error "Directory $cmd_dir does not exist. Ensure the repository was cloned correctly."
@@ -62,67 +76,46 @@ EsIndexer_Build() {
 
     # Build the ElasticSearch Indexer executable
     Log-SubStep "Compile ElasticSearch Indexer Executable"
-    go build -o elasticindexer || {
-        Log-Error "Failed to build ElasticSearch Indexer executable."
+    go install || {
+        Log-Error "Failed to install Go dependencies for ElasticSearch Indexer."
         return 1
     }
-
-    # Set executable permissions
-    chmod +x elasticindexer || {
-        Log-Error "Failed to set executable permissions for elasticindexer."
+    go build -o elasticindexer || {
+        Log-Error "Failed to build ElasticSearch Indexer executable."
         return 1
     }
 
     Log "ElasticSearch Indexer executable built successfully."
 }
 
-# Create and enable the systemd service for ElasticSearch Indexer
+# Enable the systemd service for ElasticSearch Indexer
 EsIndexer_Create_Service() {
-    Log-Step "Create and Enable Systemd Service for ElasticSearch Indexer"
+    Log-Step "Enable Systemd Service for ElasticSearch Indexer"
 
-    local cmd_dir="$HOME/mx-chain-es-indexer-go/cmd/elasticindexer"
     local service_file="/etc/systemd/system/mvx-elasticindexer.service"
 
-    # Create the systemd service file
-    if [ ! -f "$service_file" ]; then
-        Log-SubStep "Create Systemd Service File"
-        Log "Creating systemd service file at $service_file"
-        cat <<EOF | sudo tee "$service_file"
-[Unit]
-Description=ElasticSearch Indexer
-After=network.target
+    Log-SubStep "Copy ElasticSearch Indexer Service File"
+    sudo cp "$HOME/mvx-api-deployer/configurationFiles/services/1-mx-chain-es-indexer-go/mvx-elasticindexer.service" "$service_file" || {
+        Log-Error "Failed to copy ElasticSearch Indexer service file."
+        return 1
+    }
 
-[Service]
-Type=simple
-User=$USERNAME
-WorkingDirectory=$cmd_dir
-ExecStart=$cmd_dir/elasticindexer
-Restart=on-failure
-
-[Install]
-WantedBy=multi-user.target
-EOF
-    else
-        Log-Warning "Systemd service file already exists at $service_file. Skipping creation."
-    fi
-
-    # Enable and start the systemd service
-    Log-SubStep "Enable and Start ElasticSearch Indexer Service"
+    Log-SubStep "Enable ElasticSearch Indexer Service"
     sudo systemctl daemon-reload
-    sudo systemctl enable elasticindexer || {
+    sudo systemctl enable mvx-elasticindexer || {
         Log-Error "Failed to enable ElasticSearch Indexer service."
         return 1
     }
-    sudo systemctl start elasticindexer || {
-        Log-Error "Failed to start ElasticSearch Indexer service."
-        return 1
-    }
+    # sudo systemctl start mvx-elasticindexer || {
+    #     Log-Error "Failed to start ElasticSearch Indexer service."
+    #     return 1
+    # }
 
     # Verify the service is running
-    sudo systemctl status elasticindexer --no-pager || {
-        Log-Error "ElasticSearch Indexer service failed to start. Check logs with 'journalctl -u elasticindexer'."
-        return 1
-    }
+    # sudo systemctl status mvx-elasticindexer --no-pager || {
+    #     Log-Error "ElasticSearch Indexer service failed to start. Check logs with 'journalctl -u mvx-elasticindexer'."
+    #     return 1
+    # }
 
-    Log "ElasticSearch Indexer systemd service configured and running."
+    Log "ElasticSearch Indexer systemd service configured and enabled."
 }

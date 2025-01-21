@@ -28,36 +28,15 @@ Upgrade_System
 Install_Docker
 
 # ---------------------------------------------------------
-# Create a New User for Running Services
+# Update .bashrc
 # ---------------------------------------------------------
-Create_User
-
-# ---------------------------------------------------------
-# Transfer Repository to the New User
-# ---------------------------------------------------------
-Transfer_Repository
-
-# ---------------------------------------------------------
-# Secure SSH Connection
-# ---------------------------------------------------------
-Secure_SSH
-
-# ---------------------------------------------------------
-# Setup Monitoring
-# ---------------------------------------------------------
-if [ "$INSTALL_ZABBIX_AGENT" = true ]; then
-    Setup_Zabbix_Agent
-fi
-
-# ---------------------------------------------------------
-# Switch to the New User
-# ---------------------------------------------------------
-sudo su - $USERNAME
+Append_Bashrc
+source ~/.bashrc
 
 # ---------------------------------------------------------
 # Instructions for the User
 # ---------------------------------------------------------
 Log-Title "Server Initialization Completed"
-Log "You are now logged in as $USERNAME. Please proceed with the next script to install the required services by running:"
+Log "Please proceed with the next script to install the required services by running:"
 Log "  cd $HOME/mvx-api-deployer"
 Log "  ./2-Install.sh"
