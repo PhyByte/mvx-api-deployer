@@ -1,0 +1,13 @@
+[Unit]
+Description=MultiversX API Service
+After=network.target
+
+[Service]
+Type=simple
+User=ubuntu
+WorkingDirectory=/home/ubuntu/mx-api-service
+ExecStart=npm run start:devnet'
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
