@@ -9,7 +9,7 @@ api:
   websocket: true
 cron:
   cacheWarmer: true
-  fastWarm: true
+  fastWarm: false
   queueWorker: true
   elasticUpdater: false
 flags:
@@ -41,6 +41,7 @@ features:
     enabled: false
   updateAccountExtraDetails:
     enabled: false
+    transfersLast24hUrl: "https://tools.multiversx.com/growth-api/explorer/widgets/most-used/applications"
   marketplace:
     enabled: false
     serviceUrl: "https://nfts-graph.multiversx.com/graphql"
@@ -50,9 +51,6 @@ features:
   dataApi:
     enabled: false
     serviceUrl: "https://data-api.multiversx.com"
-  assetsFetch:
-    enabled: true
-    assetesUrl: "https://tools.multiversx.com/assets-cdn"
   auth:
     enabled: false
     maxExpirySeconds: 86400
@@ -64,30 +62,33 @@ features:
   stakingV4:
     enabled: false
     cronExpression: "*/5 * * * * *"
-    activationEpoch: 1043
+    activationEpoch: 1391
   nodeEpochsLeft:
     enabled: false
   transactionProcessor:
     enabled: false
-    maxLookBehind: 100
+    maxLookBehind: 1000
   transactionCompleted:
     enabled: false
-    maxLookBehind: 100
+    maxLookBehind: 1000
     logLevel: "Error"
   transactionBatch:
-    enabled: true
-    maxLookBehind: 100
+    enabled: false
+    maxLookBehind: 1000
+  deepHistory:
+    enabled: false
+    url: ""
   statusChecker:
     enabled: false
     thresholds:
-      tokens: 500
-      nodes: 3000
-      providers: 10
-      tokenSupplyCount: 20
-      tokenAssets: 20
-      tokenAccounts: 500
-      tokenTransactions: 500
-      nodeValidators: 300
+      tokens: 1000
+      nodes: 5000
+      providers: 150
+      tokenSupplyCount: 100
+      tokenAssets: 100
+      tokenAccounts: 1000
+      tokenTransactions: 1000
+      nodeValidators: 3260
   nftScamInfo:
     enabled: false
   processNfts:
@@ -106,6 +107,9 @@ features:
   providersFetch:
     enabled: true
     serviceUrl: "https://api.multiversx.com"
+  assetsFetch:
+    enabled: true
+    assetesUrl: "https://tools.multiversx.com/assets-cdn"
 image:
   width: 600
   height: 600
@@ -130,7 +134,7 @@ urls:
   nftThumbnails: "https://media.elrond.com/nfts/thumbnail"
   tmp: "/tmp"
   ipfs: "https://ipfs.io/ipfs"
-  socket: "socket-api.multiversx.com"
+  socket: "socket-api-fra.multiversx.com"
   maiarId: "https://id-api.multiversx.com"
 indexer:
   type: "elastic"
@@ -157,8 +161,8 @@ contracts:
   auction: "erd1qqqqqqqqqqqqqqqpqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqplllst77y4l"
   staking: "erd1qqqqqqqqqqqqqqqpqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqllls0lczs7"
   delegationManager: "erd1qqqqqqqqqqqqqqqpqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqylllslmq6y6"
-  delegation: "erd1qqqqqqqqqqqqqpgq97wezxw6l7lgg7k9rxvycrz66vn92ksh2tssxwf7ep"
-  metabonding: "erd1qqqqqqqqqqqqqpgqkg7we73j769ew5we4yyx7uyvnn0nefqgd8ssm6vjc2"
+  delegation: "erd1qqqqqqqqqqqqqpgqxwakt2g7u9atsnr03gqcgmhcv38pt7mkd94q6shuwt"
+  metabonding: "erd1qqqqqqqqqqqqqpgq50dge6rrpcra4tp9hl57jl0893a4r2r72jpsk39rjj"
 inflation:
   - 1952123
   - 1746637
