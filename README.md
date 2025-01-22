@@ -21,6 +21,7 @@ Having a complete API usually required a lot of steps from a lot of repositories
 - [**ElasticSearch Database**](https://github.com/elastic/elasticsearch): Store the converted blockchain data.
 - [**Kibana**](https://github.com/elastic/kibana): Visualize data and logs from the blockchain.
 - [**MultiversX API**](https://docs.multiversx.com/sdk-and-tools/rest-api/multiversx-api): Query blockchain data externally via a standard API.
+- [**xExchange**](https://github.com/multiversx/mx-exchange-service): The official exchange service for feed the MultiversX API.
 
 
 ## **0 - Prerequisites**
@@ -28,10 +29,10 @@ Having a complete API usually required a lot of steps from a lot of repositories
 ### **Hardware**
 To support the infrastructure's heavy load, we recommend deploying on a bare-metal server with the following specifications depending on your needs:
 
-- **12-16 CPU cores**
-- **32-64 GB RAM**
-- **1 TB SSD storage**
-- **1 Gbps network bandwidth**
+| Network | Machine Type| CPU Cores | RAM | Storage | Bandwidth |
+|---------|-------------|-----------|-----|---------|-----------|
+| Mainnet |     Bare    |8-16     | 32-64 GB | 1 TB SSD | 1 Gbps |
+| Devnet  |     VPS     | 4-8      | 16-32 GB | 500 GB SSD | 1 Gbps |
 
 ### **Security**
 Before deployment:
@@ -42,7 +43,7 @@ Before deployment:
 At the root of this repository you will find the file named config.cfg. It contains variables that can be configured to customize the deployment.
 
 The following variables are available:
-- **USERNAME**: The username for the new user that will be created.
+- **USERNAME**: The username on which the services will be installed.
 - **NETWORK**: The network to deploy. Currently supports `mainnet`, `devnet` and `testnet` networks.
 
 Currently, the deployment is configured with default settings. As development progresses, more configuration options will be added, such as enabling a **full history node** or customizing ElasticSearch settings.
@@ -65,17 +66,11 @@ Currently, the deployment is configured with default settings. As development pr
 ### **What this script does:**
 - Updates and upgrades your system.
 - Installs Docker and Docker Compose.
-- Creates a new user, `mvx-api`, for running services.
-- Transfer your cloned and modified repository to the `mvx-api` user.
+
 
 ---
 
 ## **2 - Install Services**
-
-At the end of the previous step you should be logged in as the `mvx-api` user. If not, switch to the `mvx-api` user before continuing with:
-```bash
-   su - mvx-api
-```
 
 As you already configured the `config.cfg` file, you can now deploy the infrastructure immediately by running: 
 ```bash
@@ -88,6 +83,7 @@ As you already configured the `config.cfg` file, you can now deploy the infrastr
 - Setup the Observing Squad with `ElasticSearch Indexer Enabled`.
 - Setup the ElasticSearch Indexer and deploy the ElasticSearch Database with Kibana.
 - Setup the MultiversX API.
+- Setup the xExchange service.
 
 
 ## **3 - Start Services**
