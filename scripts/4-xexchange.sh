@@ -28,7 +28,7 @@ xExchange_Prepare_Environment() {
 xExchange_Copy_Configuration() {
     Log-Step "Copy xExchange Configuration"
 
-    local source_dir="$HOME/mvx-api-deployer/config/$ENVIRONMENT/2-mx-exchange-service"
+    local source_dir="$HOME/mvx-api-deployer/config/$NETWORK/2-mx-exchange-service"
     local repo_dir="$HOME/mx-exchange-service"
 
     Log-SubStep "Copy docker-compose.yml file"
@@ -47,7 +47,7 @@ xExchange_Copy_Configuration() {
 xExchange_Overwrite_Sll_configuration() {
     Log-Step "Overwrite SSL configuration file"
 
-    local source_dir="$HOME/mvx-api-deployer/config/$ENVIRONMENT/2-mx-exchange-service"
+    local source_dir="$HOME/mvx-api-deployer/config/$NETWORK/2-mx-exchange-service"
     local repo_dir="$HOME/mx-exchange-service"
     local config_file="$source_dir/timescaledb.module.ts"
 
@@ -90,7 +90,7 @@ xExchange_Create_Service() {
     local service_file="/etc/systemd/system/mvx-exchange.service"
 
     Log-SubStep "Copy xExchange Service File"
-    sudo cp "$HOME/mvx-api-deployer/config/$ENVIRONMENT/2-mx-exchange-service/mvx-exchange.service" "$service_file" || {
+    sudo cp "$HOME/mvx-api-deployer/config/$NETWORK/2-mx-exchange-service/mvx-exchange.service" "$service_file" || {
         Log-Error "Failed to copy xExchange Indexer service file."
         return 1
     }
