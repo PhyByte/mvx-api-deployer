@@ -28,7 +28,7 @@ EsIndexer_Prepare_Environment() {
 EsIndexer_Copy_Configuration() {
     Log-Step "Copy ElasticSearch Indexer Configuration"
 
-    local source_dir="$HOME/mvx-api-deployer/config/${ENVIRONMENT}/1-mx-chain-es-indexer-go"
+    local source_dir="$HOME/mvx-api-deployer/config/$ENVIRONMENT/1-mx-chain-es-indexer-go"
     local repo_dir="$HOME/mx-chain-es-indexer-go"
 
     Log-SubStep "Copy docker compose file"
@@ -95,7 +95,7 @@ EsIndexer_Create_Service() {
     local service_file="/etc/systemd/system/mvx-elasticindexer.service"
 
     Log-SubStep "Copy ElasticSearch Indexer Service File"
-    sudo cp "$HOME/mvx-api-deployer/config/${ENVIRONMENT}/1-mx-chain-es-indexer-go/mvx-elasticindexer.service" "$service_file" || {
+    sudo cp "$HOME/mvx-api-deployer/config/$ENVIRONMENT/1-mx-chain-es-indexer-go/mvx-elasticindexer.service" "$service_file" || {
         Log-Error "Failed to copy ElasticSearch Indexer service file."
         return 1
     }
