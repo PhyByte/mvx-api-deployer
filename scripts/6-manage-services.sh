@@ -189,7 +189,11 @@ xExchange_Start() {
    Log-Step "Start MultiversX xExchange"
 
    sudo systemctl start mvx-exchange.service || {
-      Log-Error "Failed to start MultiversX xExchange service. Check logs with 'journalctl -u mvx-exchange'."
+      Log-Error "Failed to start MultiversX xExchange service. Check logs with 'journalctl -u mvx-exchange.service'."
+      return 1
+   }
+   sudo systemctl status mvx-exchange.service --no-pager || {
+      Log-Error "MultiversX xExchange service is not running as expected. Check logs with 'journalctl -u mvx-exchange.service'."
       return 1
    }
    Log "xExchange started successfully."
@@ -200,7 +204,7 @@ xExchange_Stop() {
    Log-Step "Stop MultiversX xExchange"
 
    sudo systemctl stop mvx-exchange.service || {
-      Log-Error "Failed to stop MultiversX xExchange service. Check logs with 'journalctl -u mvx-exchange'."
+      Log-Error "Failed to stop MultiversX xExchange service. Check logs with 'journalctl -u mvx-exchange.service'."
       return 1
    }
 
@@ -257,12 +261,12 @@ MxApi_Stop() {
 
 # Function to check the status of the MultiversX API service
 MxApi_Check_Status() {
-    Log-Step "Check MultiversX API Service Status"
+   Log-Step "Check MultiversX API Service Status"
 
-    if systemctl is-active --quiet mvx-api.service; then
-        Log "MultiversX API service is running."
-    else
-        Log-Warning "MultiversX API service is not running."
-        sudo journalctl -u mvx-api.service --since "5 minutes ago"
-    fi
+   if systemctl is-active --quiet mvx-api.service; then
+      Log "MultiversX API service is running."
+   else
+      Log-Warning "MultiversX API service is not running."
+      sudo journalctl -u mvx-api.service --since "5 minutes ago"
+   fi
 }

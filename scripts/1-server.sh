@@ -53,14 +53,13 @@ Install_Docker() {
     docker compose version
 }
 
-
 Append_Bashrc() {
     Log-Step "Append custom bashrc configuration"
     # Append the custom bashrc configuration to the user's .bashrc file
-    if [ -f "/home/$USERNAME/mvx-api-deployer/configurationFiles/bashrc" ]; then
+    if [ -f "/home/$USERNAME/mvx-api-deployer/config/bashrc" ]; then
         Log "Appending custom bashrc configuration to /home/$USERNAME/.bashrc"
-        cat /home/$USERNAME/mvx-api-deployer/configurationFiles/bashrc >>/home/$USERNAME/.bashrc
+        cat /home/$USERNAME/mvx-api-deployer/config/bashrc >>/home/$USERNAME/.bashrc
     else
-        Log-Warning "Custom bashrc file not found in /home/$USERNAME/mvx-api-deployer/configurationFiles/"
+        Log-Warning "Custom bashrc file not found in /home/$USERNAME/mvx-api-deployer/config/"
     fi
 }
