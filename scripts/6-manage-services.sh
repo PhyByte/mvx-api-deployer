@@ -12,6 +12,7 @@ Start_All_Services() {
    ObsSquad_Start || Log-Warning "Observing Squad failed to start."
    EsIndexer_Start || Log-Warning "ElasticSearch Indexer failed to start."
    EsKibana_Start || Log-Warning "ElasticSearch and Kibana failed to start."
+   xExchange_Start || Log-Warning "MultiversX xExchange failed to start."
    MxApi_Start || Log-Warning "MultiversX API failed to start."
 
    Log "All services start commands executed. Verify individual service statuses."
@@ -25,6 +26,7 @@ Stop_All_Services() {
    MxApi_Stop || Log-Warning "MultiversX API failed to stop."
    EsKibana_Stop || Log-Warning "ElasticSearch and Kibana failed to stop."
    EsIndexer_Stop || Log-Warning "ElasticSearch Indexer failed to stop."
+   xExchange_Stop || Log-Warning "MultiversX xExchange failed to stop."
    ObsSquad_Stop || Log-Warning "Observing Squad failed to stop."
 
    Log "All services stop commands executed. Verify individual service statuses."
@@ -36,11 +38,6 @@ Check_All_Status() {
    Log-Step "Check Status of All Services"
 
    Log-SubStep "Checking Observing Squad Status TODO:"
-   # if pgrep -f "start_all" &>/dev/null; then
-   #    Log "Observing Squad is running."
-   # else
-   #    Log-Warning "Observing Squad is not running."
-   # fi
 
    Log-SubStep "Checking ElasticSearch Indexer Status"
    if systemctl is-active --quiet elasticindexer; then
@@ -49,26 +46,7 @@ Check_All_Status() {
       Log-Warning "ElasticSearch Indexer service is not running."
    fi
 
-   Log-SubStep "Checking ElasticSearch and Kibana Status"
-   if docker ps | grep -q 'kibana'; then
-      Log "ElasticSearch and Kibana services are running."
-   else
-      Log-Warning "ElasticSearch and Kibana services are not running."
-   fi
-
    Log-SubStep "Checking MultiversX API Status: TODO:"
-   # local api_pid_file="$HOME/mx-api-service/mx-api.pid"
-   # if [ -f "$api_pid_file" ]; then
-   #    local api_pid
-   #    api_pid=$(cat "$api_pid_file")
-   #    if ps -p "$api_pid" &>/dev/null; then
-   #       Log "MultiversX API is running (PID: $api_pid)."
-   #    else
-   #       Log-Warning "MultiversX API is not running, but PID file exists."
-   #    fi
-   # else
-   #    Log-Warning "MultiversX API PID file not found. The service may not be running."
-   # fi
 
    Log "Service status check completed."
 }
@@ -120,7 +98,7 @@ ObsSquad_Stop() {
 EsIndexer_Start() {
    Log-Step "Start ElasticSearch Indexer"
 
-   local service_name="elasticindexer"
+   local service_name="mvx-elasticindexer.service"
 
    sudo systemctl start "$service_name" || {
       Log-Error "Failed to start ElasticSearch Indexer service. Check logs with 'journalctl -u $service_name'."
@@ -139,7 +117,7 @@ EsIndexer_Start() {
 EsIndexer_Stop() {
    Log-Step "Stop ElasticSearch Indexer"
 
-   local service_name="elasticindexer"
+   local service_name="mvx-elasticindexer.service"
 
    sudo systemctl stop "$service_name" || {
       Log-Error "Failed to stop ElasticSearch Indexer service."
@@ -173,7 +151,7 @@ EsKibana_Start() {
       return 1
    }
 
-   docker-compose up -d || {
+   sudo docker compose up -d || {
       Log-Error "Failed to start ElasticSearch and Kibana services. Check Docker Compose logs for details."
       return 1
    }
@@ -197,7 +175,7 @@ EsKibana_Stop() {
       return 1
    }
 
-   docker-compose down || {
+   sudo docker compose down || {
       Log-Error "Failed to stop ElasticSearch and Kibana services. Check Docker Compose logs for details."
       return 1
    }
@@ -205,13 +183,42 @@ EsKibana_Stop() {
    Log "ElasticSearch and Kibana services stopped successfully."
 }
 
+# --------- MULTIVERSX xEXCHANGE FUNCTIONS ---------
+# Start the MultiversX xExchange
+xExchange_Start() {
+   Log-Step "Start MultiversX xExchange"
+
+   sudo systemctl start mvx-exchange.service || {
+      Log-Error "Failed to start MultiversX xExchange service. Check logs with 'journalctl -u mvx-exchange'."
+      return 1
+   }
+   Log "xExchange started successfully."
+}
+
+# Stop the MultiversX xExchange
+xExchange_Stop() {
+   Log-Step "Stop MultiversX xExchange"
+
+   sudo systemctl stop mvx-exchange.service || {
+      Log-Error "Failed to stop MultiversX xExchange service. Check logs with 'journalctl -u mvx-exchange'."
+      return 1
+   }
+
+   sudo systemctl status mvx-exchange.service --no-pager | grep "inactive (dead)" &>/dev/null
+   if [ $? -eq 0 ]; then
+      Log "xExchange stopped successfully."
+   else
+      Log-Error "xExchange is still running. Please check manually."
+      return 1
+   fi
+}
 # --------- MULTIVERSX API FUNCTIONS ---------
 
 # Start the MultiversX API
 MxApi_Start() {
    Log-Step "Start MultiversX API Service"
 
-   local service_name="multiversx-api"
+   local service_name="mvx-api"
 
    Log-SubStep "Starting MultiversX API using systemctl"
    sudo systemctl start "$service_name" || {
@@ -231,7 +238,7 @@ MxApi_Start() {
 MxApi_Stop() {
    Log-Step "Stop MultiversX API Service"
 
-   local service_name="multiversx-api"
+   local service_name="mvx-api"
 
    Log-SubStep "Stopping MultiversX API using systemctl"
    sudo systemctl stop "$service_name" || {
@@ -246,4 +253,16 @@ MxApi_Stop() {
       Log-Error "MultiversX API service is still running. Please check manually."
       return 1
    fi
+}
+
+# Function to check the status of the MultiversX API service
+MxApi_Check_Status() {
+    Log-Step "Check MultiversX API Service Status"
+
+    if systemctl is-active --quiet mvx-api.service; then
+        Log "MultiversX API service is running."
+    else
+        Log-Warning "MultiversX API service is not running."
+        sudo journalctl -u mvx-api.service --since "5 minutes ago"
+    fi
 }
