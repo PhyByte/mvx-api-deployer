@@ -68,7 +68,7 @@ ObsSquad_Copy_Configuration() {
     Log-Step "Overwrite node configurations into ~/elrond-nodes/node-[0,1,2,3]/config"
 
     # Define the source directory for configuration files
-    local config_source_dir="$HOME/mvx-api-deployer/configurationFiles/services/0-observingSquad/elrond-nodes"
+    local config_source_dir="$HOME/mvx-api-deployer/config/${ENVIRONMENT}/0-observingSquad/elrond-nodes"
 
     # Verify if the source directory exists
     if [ ! -d "$config_source_dir" ]; then

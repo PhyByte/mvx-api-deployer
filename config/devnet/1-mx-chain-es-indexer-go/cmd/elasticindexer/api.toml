@@ -1,0 +1,10 @@
+# Overwritted by mvx-api-deployer
+rest-api-interface = ":5555"
+
+[api-packages]
+
+[api-packages.status]
+    routes = [
+        { name = "/metrics", open = true },
+        { name = "/prometheus-metrics", open = true }
+    ]

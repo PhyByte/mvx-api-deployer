@@ -1,0 +1,13 @@
+[Unit]
+Description=MultiversX Exchange Service
+After=network.target
+
+[Service]
+Type=simple
+User=ubuntu
+WorkingDirectory=/home/ubuntu/mx-exchange-service
+ExecStart=npm run start
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target

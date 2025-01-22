@@ -91,7 +91,7 @@ MxApi_Initialize() {
 MxApi_Copy_Configuration() {
     Log-Step "Copy MultiversX API Configuration"
 
-    local source_dir="$HOME/mvx-api-deployer/configurationFiles/services/3-mx-api-service"
+    local source_dir="$HOME/mvx-api-deployer/config/${ENVIRONMENT}/3-mx-api-service"
     local repo_dir="$HOME/mx-api-service"
 
     Log-SubStep "Copy docker-compose.yml file"
@@ -115,7 +115,7 @@ MxApi_Create_Service() {
     local service_file="/etc/systemd/system/mvx-api.service"
 
     Log-SubStep "Copy MultiversX API service file"
-    sudo cp "$HOME/mvx-api-deployer/configurationFiles/services/3-mx-api-service/mvx-api.service" "$service_file" || {
+    sudo cp "$HOME/mvx-api-deployer/config/${ENVIRONMENT}/3-mx-api-service/mvx-api.service" "$service_file" || {
         Log-Error "Failed to copy MultiversX API service file."
         return 1
     }
