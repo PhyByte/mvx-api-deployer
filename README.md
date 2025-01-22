@@ -39,7 +39,17 @@ Before deployment:
 - Secure your server with an **SSH key**.
 - Ensure no sensitive data is on the server. Although the API is stateless, misuse of the infrastructure could disrupt services.
 
+
+## **1 - Initialize Server**
+
+1. Ensure you are logged in as the ubuntu user
+
+2. You will need this repository on your machine before starting:
+```bash
+   git clone https://github.com/PhyByte/mvx-api-deployer.git
+```
 ### **Configuration**
+
 At the root of this repository you will find the file named config.cfg. It contains variables that can be configured to customize the deployment.
 
 The following variables are available:
@@ -48,15 +58,7 @@ The following variables are available:
 
 Currently, the deployment is configured with default settings. As development progresses, more configuration options will be added, such as enabling a **full history node** or customizing ElasticSearch settings.
 
-## **1 - Initialize Server**
-
-1. Ensure you are logged in as the root user
-
-2. You will need this repository on your machine before starting:
-```bash
-   git clone https://github.com/PhyByte/mvx-api-deployer.git
-```
-
+### **Running the Initialization Script** 
 3. Run the installation script that will set up the requirements for the deployment:
 ```bash
   cd mvx-api-deployer
