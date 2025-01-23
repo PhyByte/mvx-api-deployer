@@ -20,7 +20,7 @@
 
     [config.elastic-cluster]
         use-kibana = false
-        url = "http://localhost:9200"
+        url = "http://localhost:9251"
         username = ""
         password = ""
         bulk-request-max-size-in-bytes = 4194304 # 4MB

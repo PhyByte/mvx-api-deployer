@@ -14,8 +14,8 @@ services:
     networks:
       - es-net
     ports:
-      - "9200:9200"
-      - "9300:9300"
+      - "9251:9200"
+      - "9351:9300"
   kibana:
     container_name: kb-container
     image: docker.elastic.co/kibana/kibana:7.16.1
@@ -26,7 +26,7 @@ services:
     depends_on:
       - elasticsearch
     ports:
-      - "5601:5601"
+      - "5651:5601"
 networks:
   es-net:
     driver: bridge

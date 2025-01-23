@@ -13,14 +13,14 @@ services:
     ports:
       - "3306:3306"
     environment:
-      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_ROOT_PASSWORD=root_5151
       - MYSQL_DATABASE=api
 
   mongodbdatabase:
     image: mongo:latest
     environment:
       MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: secret
+      MONGO_INITDB_ROOT_PASSWORD: secret_5151
     ports:
       - 27017:27017
 
@@ -31,8 +31,8 @@ services:
     image: rabbitmq:3.9
     container_name: rabbitmq
     environment:
-      RABBITMQ_DEFAULT_USER: guest
-      RABBITMQ_DEFAULT_PASS: guest
+      RABBITMQ_DEFAULT_USER: guest_5151
+      RABBITMQ_DEFAULT_PASS: guest_5151
     ports:
       - 5672:5672
       - 15672:15672
@@ -43,8 +43,8 @@ services:
     environment:
       HOSTNAME: notifier
       RABBITMQ_NODENAME: rabbitmq
-      RABBITMQ_DEFAULT_USER: "guest"
-      RABBITMQ_DEFAULT_PASS: "guest"
+      RABBITMQ_DEFAULT_USER: "guest_5151"
+      RABBITMQ_DEFAULT_PASS: "guest_5151"
     volumes:
       - /var/lib/notifier
     ports:

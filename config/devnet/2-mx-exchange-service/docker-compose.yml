@@ -12,10 +12,10 @@ services:
     image: 331leo/rabbitmq3-management-mqtt
     hostname: rabbitmq
     environment:
-      HOSTNAME: rabbitmq
-      RABBITMQ_NODENAME: rabbitmq
-      RABBITMQ_DEFAULT_USER: "guest"
-      RABBITMQ_DEFAULT_PASS: "guest"
+      - HOSTNAME=rabbitmq
+      - RABBITMQ_NODENAME=rabbitmq
+      - RABBITMQ_DEFAULT_USER=rabbitmq_user5151
+      - RABBITMQ_DEFAULT_PASS=rabbitmq_pass5151
     volumes:
       - /var/lib/rabbitmq
     ports:
@@ -25,8 +25,8 @@ services:
     image: mongo:latest
     environment:
       - MONGODB_DATABASE=development
-      - MONGO_INITDB_ROOT_USERNAME=admin
-      - MONGO_INITDB_ROOT_PASSWORD=admin
+      - MONGO_INITDB_ROOT_USERNAME=admin_5151
+      - MONGO_INITDB_ROOT_PASSWORD=admin_5151
     ports:
       - "27018:27017"
   timescaledb:
@@ -35,7 +35,7 @@ services:
     ports:
       - "5432:5432"
     environment:
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres_5151
+      POSTGRES_USER: postgres_5151
       TIMESCALEDB_TELEMETRY: off
       PGDATA: /var/lib/postgresql/data/pgdata
