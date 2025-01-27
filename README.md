@@ -31,8 +31,8 @@ To support the infrastructure's heavy load, we recommend deploying on a bare-met
 
 | Network | Machine Type| CPU Cores | RAM | Storage | Bandwidth |
 |---------|-------------|-----------|-----|---------|-----------|
-| Mainnet |     Bare    |8-16     | 32-64 GB | 1 TB SSD | 1 Gbps |
-| Devnet  |     VPS     | 4-8      | 16-32 GB | 500 GB SSD | 1 Gbps |
+| Mainnet |     Bare    |8     | 32 GB | 1 TB SSD | 1 Gbps |
+| Devnet  |     VPS     | 4     | 16 GB | 500 GB SSD | 1 Gbps |
 
 ### **Security**
 Before deployment:
