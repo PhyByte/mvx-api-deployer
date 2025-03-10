@@ -26,6 +26,7 @@ ObsSquad_Prepare_Environment() {
     sed -i "s/^ENVIRONMENT=\".*\"/ENVIRONMENT=\"$NETWORK\"/" "$config_file"
     sed -i "s|^CUSTOM_HOME=.*|CUSTOM_HOME=\"$HOME\"|" "$config_file"
     sed -i "s/^CUSTOM_USER=.*$/CUSTOM_USER=\"$USERNAME\"/" "$config_file"
+    sed -i "s/^OVERRIDE_PROXYVER=.*$/OVERRIDE_PROXYVER=true/" "$config_file"
 
 }
 
