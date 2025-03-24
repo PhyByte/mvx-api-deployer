@@ -14,8 +14,8 @@ services:
     environment:
       HOSTNAME: rabbitmq
       RABBITMQ_NODENAME: rabbitmq
-      RABBITMQ_DEFAULT_USER: "guest_XXX"
-      RABBITMQ_DEFAULT_PASS: "guest_XXX"
+      RABBITMQ_DEFAULT_USER: "guest_1234"
+      RABBITMQ_DEFAULT_PASS: "guest_1234"
     volumes:
       - /var/lib/rabbitmq
     ports:
@@ -25,8 +25,8 @@ services:
     image: mongo:latest
     environment:
       - MONGODB_DATABASE=development
-      - MONGO_INITDB_ROOT_USERNAME=admin_XXX
-      - MONGO_INITDB_ROOT_PASSWORD=admin_XXX
+      - MONGO_INITDB_ROOT_USERNAME=admin_1234
+      - MONGO_INITDB_ROOT_PASSWORD=admin_1234
     ports:
       - "27018:27017"
   timescaledb:
