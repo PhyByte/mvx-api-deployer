@@ -20,7 +20,7 @@ services:
     image: mongo:latest
     environment:
       MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: secret
+      MONGO_INITDB_ROOT_PASSWORD: secret_1234
     ports:
       - 27017:27017
 

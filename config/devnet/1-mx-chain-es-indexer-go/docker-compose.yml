@@ -6,7 +6,7 @@ services:
     environment:
       - "discovery.type=single-node"
       - "xpack.security.enabled=false"
-      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      - "ES_JAVA_OPTS=-Xms2g -Xmx2g"
     ulimits:
       memlock:
         soft: -1
@@ -16,6 +16,7 @@ services:
     ports:
       - "9200:9200"
       - "9300:9300"
+    restart: unless-stopped
   kibana:
     container_name: kb-container
     image: docker.elastic.co/kibana/kibana:7.16.1

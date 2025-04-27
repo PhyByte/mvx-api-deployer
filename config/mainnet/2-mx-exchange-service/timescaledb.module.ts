@@ -1,4 +1,3 @@
-// Overwritted by mvx-api-deployer
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { CommonAppModule } from 'src/common.app.module';
@@ -16,6 +15,15 @@ import {
     SumHourly,
     TokenBurnedWeekly,
     XExchangeAnalyticsEntity,
+    TokenCandlesMinute,
+    TokenCandlesHourly,
+    TokenCandlesDaily,
+    PairFirstTokenCandlesMinute,
+    PairFirstTokenCandlesHourly,
+    PairFirstTokenCandlesDaily,
+    PairSecondTokenCandlesMinute,
+    PairSecondTokenCandlesHourly,
+    PairSecondTokenCandlesDaily,
 } from './entities/timescaledb.entities';
 import { DynamicModuleUtils } from 'src/utils/dynamic.module.utils';
 
@@ -33,7 +41,7 @@ import { DynamicModuleUtils } from 'src/utils/dynamic.module.utils';
                 username: apiConfig.getTimescaleDbUsername(),
                 password: apiConfig.getTimescaleDbPassword(),
                 applicationName: 'xExchangeService',
-                ssl: false,
+                ssl: true,
                 entities: ['dist/**/*.entities.{ts,js}'],
             }),
             inject: [ApiConfigService],
@@ -49,6 +57,15 @@ import { DynamicModuleUtils } from 'src/utils/dynamic.module.utils';
             PriceCandleMinute,
             PriceCandleHourly,
             PriceCandleDaily,
+            TokenCandlesMinute,
+            TokenCandlesHourly,
+            TokenCandlesDaily,
+            PairFirstTokenCandlesMinute,
+            PairFirstTokenCandlesHourly,
+            PairFirstTokenCandlesDaily,
+            PairSecondTokenCandlesMinute,
+            PairSecondTokenCandlesHourly,
+            PairSecondTokenCandlesDaily,
         ]),
     ],
     providers: [TimescaleDBQueryService, TimescaleDBWriteService],
